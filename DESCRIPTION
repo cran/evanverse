@@ -1,0 +1,40 @@
+Package: evanverse
+Type: Package
+Title: Utility Functions for Data Analysis and Visualization
+Version: 0.3.7
+Date: 2025-10-16
+Authors@R: 
+    person("Evan", "Zhou", email = "evanzhou.bio@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0009-0009-4600-8175"))
+Author: Evan Zhou [aut, cre] (ORCID: <https://orcid.org/0009-0009-4600-8175>)
+Maintainer: Evan Zhou <evanzhou.bio@gmail.com>
+Description: A comprehensive collection of utility functions for data analysis
+    and visualization in R. The package provides 55+ functions for data
+    manipulation, file handling, color palette management, bioinformatics
+    workflows, plotting, and package management. Features include void value
+    handling, custom infix operators, flexible file I/O, and publication-ready
+    visualizations with sensible defaults. Implementation follows tidyverse
+    principles (Wickham et al. (2019) <doi:10.21105/joss.01686>) and incorporates
+    best practices from the R community.
+License: MIT + file LICENSE
+License_is_FOSS: yes
+License_restricts_use: no
+Encoding: UTF-8
+RoxygenNote: 7.3.2
+Config/testthat/edition: 3
+URL: https://github.com/evanbio/evanverse,
+        https://evanbio.github.io/evanverse/
+BugReports: https://github.com/evanbio/evanverse/issues
+VignetteBuilder: knitr
+Depends: R (>= 4.1)
+Imports: cli, tibble, tidyr, data.table, dplyr, ggplot2, jsonlite,
+        curl, openxlsx, readxl, tictoc, fs, rlang, withr, ggpubr,
+        utils, tools, stats, grDevices
+Suggests: BiocManager, GSEABase, Biobase, GEOquery, biomaRt, knitr,
+        rmarkdown, testthat (>= 3.0.0), ggvenn, ggVennDiagram, writexl,
+        R.utils, janitor, RColorBrewer, devtools, digest, forestploter,
+        purrr, reactable
+NeedsCompilation: no
+Packaged: 2025-10-16 11:46:30 UTC; 84241
+Repository: CRAN
+Date/Publication: 2025-10-21 09:00:02 UTC

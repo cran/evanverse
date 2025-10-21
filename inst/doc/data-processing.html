@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Data Processing &amp; Transformation</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Data Processing &amp; Transformation</h1>
+
+
+
+<div id="data-processing-transformation-with-evanverse" class="section level1">
+<h1>🔄 Data Processing &amp; Transformation with evanverse</h1>
+<p>This guide covers the comprehensive data processing and
+transformation capabilities of evanverse, with special focus on void
+value handling and data manipulation utilities.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(evanverse)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div>
+<div id="understanding-void-values" class="section level2">
+<h2>🕳️ Understanding Void Values</h2>
+<p>In data analysis, “void” values are elements that represent missing
+or absent data. The evanverse package provides a comprehensive system
+for handling these values.</p>
+<div id="what-are-void-values" class="section level3">
+<h3>What Are Void Values?</h3>
+<p>Void values in evanverse include: - <code>NA</code> (missing values)
+- <code>NULL</code> (null values) - <code>&quot;&quot;</code> (empty strings)</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Examples of void values</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>void_examples <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="at">numbers =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="cn">NA</span>, <span class="dv">3</span>, <span class="dv">4</span>),</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="at">strings =</span> <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="cn">NA</span>),</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="at">mixed =</span> <span class="fu">c</span>(<span class="st">&quot;text&quot;</span>, <span class="cn">NA</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;data&quot;</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Examples of data with void values:&quot;</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Examples of data with void values:&quot;</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="fu">str</span>(void_examples)</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; List of 3</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt;  $ numbers: num [1:4] 1 NA 3 4</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&gt;  $ strings: chr [1:4] &quot;A&quot; &quot;&quot; &quot;C&quot; NA</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt;  $ mixed  : chr [1:4] &quot;text&quot; NA &quot;&quot; &quot;data&quot;</span></span></code></pre></div>
+</div>
+</div>
+<div id="detecting-void-values" class="section level2">
+<h2>🔍 Detecting Void Values</h2>
+<div id="single-value-checks" class="section level3">
+<h3>Single Value Checks</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Check if individual values are void</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">is_void</span>(<span class="cn">NA</span>))           <span class="co"># TRUE</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">is_void</span>(<span class="st">&quot;&quot;</span>))           <span class="co"># TRUE</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">is_void</span>(<span class="cn">NULL</span>))         <span class="co"># TRUE</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">is_void</span>(<span class="st">&quot;hello&quot;</span>))      <span class="co"># FALSE</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">is_void</span>(<span class="dv">0</span>))            <span class="co"># FALSE</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
+</div>
+<div id="vector-checks" class="section level3">
+<h3>Vector Checks</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Check if any element in a vector is void</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>test_vector <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="cn">NA</span>, <span class="st">&quot;E&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">any_void</span>(test_vector))  <span class="co"># TRUE</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co"># Example with no void values</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>clean_vector <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">any_void</span>(clean_vector))  <span class="co"># FALSE</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
+</div>
+<div id="data-frame-analysis" class="section level3">
+<h3>Data Frame Analysis</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># Create sample data with various void patterns</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>sample_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="at">id =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">&quot;Alice&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;Charlie&quot;</span>, <span class="cn">NA</span>, <span class="st">&quot;Eve&quot;</span>, <span class="st">&quot;Frank&quot;</span>),</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="at">age =</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">30</span>, <span class="cn">NA</span>, <span class="dv">35</span>, <span class="dv">28</span>, <span class="dv">32</span>),</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="at">city =</span> <span class="fu">c</span>(<span class="st">&quot;NYC&quot;</span>, <span class="st">&quot;LA&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;Chicago&quot;</span>, <span class="cn">NA</span>, <span class="st">&quot;Boston&quot;</span>),</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>)</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Sample data with void values:&quot;</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Sample data with void values:&quot;</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="fu">print</span>(sample_data)</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt;   id    name age    city</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; 1  1   Alice  25     NYC</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt; 2  2          30      LA</span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt; 3  3 Charlie  NA        </span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt; 4  4    &lt;NA&gt;  35 Chicago</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt; 5  5     Eve  28    &lt;NA&gt;</span></span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="co">#&gt; 6  6   Frank  32  Boston</span></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="co"># Identify columns with void values</span></span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a>void_cols <span class="ot">&lt;-</span> <span class="fu">cols_with_void</span>(sample_data)</span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;Columns with void values:&quot;</span>, <span class="fu">paste</span>(void_cols, <span class="at">collapse =</span> <span class="st">&quot;, &quot;</span>)))</span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Columns with void values: name, age, city&quot;</span></span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a></span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a><span class="co"># Identify rows with void values</span></span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a>void_rows <span class="ot">&lt;-</span> <span class="fu">rows_with_void</span>(sample_data)</span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;Rows with void values:&quot;</span>, <span class="fu">paste</span>(void_rows, <span class="at">collapse =</span> <span class="st">&quot;, &quot;</span>)))</span>
+<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Rows with void values: FALSE, TRUE, TRUE, TRUE, TRUE, FALSE&quot;</span></span></code></pre></div>
+</div>
+</div>
+<div id="replacing-void-values" class="section level2">
+<h2>🔧 Replacing Void Values</h2>
+<div id="basic-replacement" class="section level3">
+<h3>Basic Replacement</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Replace all void values with a single replacement</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>messy_vector <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="cn">NA</span>, <span class="st">&quot;E&quot;</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>clean_vector <span class="ot">&lt;-</span> <span class="fu">replace_void</span>(messy_vector, <span class="at">value =</span> <span class="st">&quot;MISSING&quot;</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Original vector:&quot;</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Original vector:&quot;</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="fu">print</span>(messy_vector)</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; [1] &quot;A&quot; &quot;&quot;  &quot;C&quot; NA  &quot;E&quot;</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;After replacement:&quot;</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; [1] &quot;After replacement:&quot;</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="fu">print</span>(clean_vector)</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; [1] &quot;A&quot;       &quot;MISSING&quot; &quot;C&quot;       &quot;MISSING&quot; &quot;E&quot;</span></span></code></pre></div>
+</div>
+<div id="selective-replacement" class="section level3">
+<h3>Selective Replacement</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Replace only specific types of void values</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>mixed_data <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="cn">NA</span>, <span class="st">&quot;E&quot;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co"># Replace only empty strings</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>only_empty <span class="ot">&lt;-</span> <span class="fu">replace_void</span>(mixed_data,</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>                          <span class="at">value =</span> <span class="st">&quot;EMPTY&quot;</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>                          <span class="at">include_na =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>                          <span class="at">include_empty_str =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Replace only empty strings:&quot;</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Replace only empty strings:&quot;</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="fu">print</span>(only_empty)</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; [1] &quot;A&quot;     &quot;EMPTY&quot; &quot;C&quot;     NA      &quot;E&quot;</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co"># Replace only NA values</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a>only_na <span class="ot">&lt;-</span> <span class="fu">replace_void</span>(mixed_data,</span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a>                       <span class="at">value =</span> <span class="st">&quot;NOT_AVAILABLE&quot;</span>,</span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>                       <span class="at">include_na =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>                       <span class="at">include_empty_str =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Replace only NA values:&quot;</span>)</span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Replace only NA values:&quot;</span></span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="fu">print</span>(only_na)</span>
+<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a><span class="co">#&gt; [1] &quot;A&quot;             &quot;&quot;              &quot;C&quot;             &quot;NOT_AVAILABLE&quot;</span></span>
+<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a><span class="co">#&gt; [5] &quot;E&quot;</span></span></code></pre></div>
+</div>
+<div id="data-frame-replacement" class="section level3">
+<h3>Data Frame Replacement</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Apply replacement column by column</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>clean_data <span class="ot">&lt;-</span> sample_data</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>clean_data<span class="sc">$</span>name <span class="ot">&lt;-</span> <span class="fu">replace_void</span>(sample_data<span class="sc">$</span>name, <span class="at">value =</span> <span class="st">&quot;UNKNOWN&quot;</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>clean_data<span class="sc">$</span>city <span class="ot">&lt;-</span> <span class="fu">replace_void</span>(sample_data<span class="sc">$</span>city, <span class="at">value =</span> <span class="st">&quot;UNKNOWN&quot;</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Data after void replacement:&quot;</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Data after void replacement:&quot;</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="fu">print</span>(clean_data)</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt;   id    name age    city</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt; 1  1   Alice  25     NYC</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt; 2  2 UNKNOWN  30      LA</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co">#&gt; 3  3 Charlie  NA UNKNOWN</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co">#&gt; 4  4 UNKNOWN  35 Chicago</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt; 5  5     Eve  28 UNKNOWN</span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt; 6  6   Frank  32  Boston</span></span></code></pre></div>
+</div>
+</div>
+<div id="removing-void-values" class="section level2">
+<h2>✂️ Removing Void Values</h2>
+<div id="drop-elements-with-void-values" class="section level3">
+<h3>Drop Elements with Void Values</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># For vectors, drop_void removes void elements</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>test_vector <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="cn">NA</span>, <span class="st">&quot;E&quot;</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>clean_vector <span class="ot">&lt;-</span> <span class="fu">drop_void</span>(test_vector)</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Original vector:&quot;</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Original vector:&quot;</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="fu">print</span>(test_vector)</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt; [1] &quot;A&quot; &quot;&quot;  &quot;C&quot; NA  &quot;E&quot;</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;After dropping void elements:&quot;</span>)</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co">#&gt; [1] &quot;After dropping void elements:&quot;</span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="fu">print</span>(clean_vector)</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co">#&gt; [1] &quot;A&quot; &quot;C&quot; &quot;E&quot;</span></span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co"># For data analysis, we can identify problematic rows/columns</span></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Rows with void values:&quot;</span>)</span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Rows with void values:&quot;</span></span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">rows_with_void</span>(sample_data))</span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="co">#&gt; [1] FALSE  TRUE  TRUE  TRUE  TRUE FALSE</span></span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Columns with void values:&quot;</span>)</span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Columns with void values:&quot;</span></span>
+<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">cols_with_void</span>(sample_data))</span>
+<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a><span class="co">#&gt; [1] &quot;name&quot; &quot;age&quot;  &quot;city&quot;</span></span></code></pre></div>
+</div>
+</div>
+<div id="data-transformation" class="section level2">
+<h2>📊 Data Transformation</h2>
+<div id="converting-data-frames-to-lists" class="section level3">
+<h3>Converting Data Frames to Lists</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Group data by a key column and create lists</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>mtcars_subset <span class="ot">&lt;-</span> mtcars[<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="fu">c</span>(<span class="st">&quot;cyl&quot;</span>, <span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;hp&quot;</span>, <span class="st">&quot;wt&quot;</span>)]</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co"># Group by cylinder count, focusing on MPG values</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>grouped_cars <span class="ot">&lt;-</span> <span class="fu">df2list</span>(</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="at">data =</span> mtcars_subset,</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  <span class="at">key_col =</span> <span class="st">&quot;cyl&quot;</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>  <span class="at">value_col =</span> <span class="st">&quot;mpg&quot;</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>)</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Cars grouped by cylinder count (MPG values):&quot;</span>)</span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Cars grouped by cylinder count (MPG values):&quot;</span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="fu">str</span>(grouped_cars)</span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&gt; List of 3</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt;  $ 4: num [1:3] 22.8 24.4 22.8</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt;  $ 6: num [1:6] 21 21 21.4 18.1 19.2 17.8</span></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#&gt;  $ 8: num [1:3] 18.7 14.3 16.4</span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co"># Access specific groups</span></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;4-cylinder cars MPG values:&quot;</span>)</span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a><span class="co">#&gt; [1] &quot;4-cylinder cars MPG values:&quot;</span></span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a><span class="fu">print</span>(grouped_cars[[<span class="st">&quot;4&quot;</span>]])</span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a><span class="co">#&gt; [1] 22.8 24.4 22.8</span></span></code></pre></div>
+</div>
+<div id="column-mapping" class="section level3">
+<h3>Column Mapping</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># Map values in a column using a named vector</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>grades_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="at">student =</span> <span class="fu">c</span>(<span class="st">&quot;Alice&quot;</span>, <span class="st">&quot;Bob&quot;</span>, <span class="st">&quot;Charlie&quot;</span>, <span class="st">&quot;Diana&quot;</span>),</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  <span class="at">grade_letter =</span> <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;A&quot;</span>, <span class="st">&quot;C&quot;</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>)</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co"># Create mapping for letter grades to numbers</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>grade_mapping <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;A&quot;</span> <span class="ot">=</span> <span class="fl">4.0</span>, <span class="st">&quot;B&quot;</span> <span class="ot">=</span> <span class="fl">3.0</span>, <span class="st">&quot;C&quot;</span> <span class="ot">=</span> <span class="fl">2.0</span>, <span class="st">&quot;D&quot;</span> <span class="ot">=</span> <span class="fl">1.0</span>, <span class="st">&quot;F&quot;</span> <span class="ot">=</span> <span class="fl">0.0</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="co"># Apply mapping using the correct parameters</span></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">map_column</span>(</span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a>  <span class="at">query =</span> grades_data,</span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a>  <span class="at">by =</span> <span class="st">&quot;grade_letter&quot;</span>,</span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a>  <span class="at">map =</span> grade_mapping,</span>
+<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a>  <span class="at">to =</span> <span class="st">&quot;grade_numeric&quot;</span></span>
+<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a>)</span>
+<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a><span class="co">#&gt;   student grade_letter grade_numeric</span></span>
+<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a><span class="co">#&gt; 1   Alice            A             4</span></span>
+<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a><span class="co">#&gt; 2     Bob            B             3</span></span>
+<span id="cb11-20"><a href="#cb11-20" tabindex="-1"></a><span class="co">#&gt; 3 Charlie            A             4</span></span>
+<span id="cb11-21"><a href="#cb11-21" tabindex="-1"></a><span class="co">#&gt; 4   Diana            C             2</span></span>
+<span id="cb11-22"><a href="#cb11-22" tabindex="-1"></a></span>
+<span id="cb11-23"><a href="#cb11-23" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Grades with numeric mapping:&quot;</span>)</span>
+<span id="cb11-24"><a href="#cb11-24" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Grades with numeric mapping:&quot;</span></span>
+<span id="cb11-25"><a href="#cb11-25" tabindex="-1"></a><span class="fu">print</span>(result)</span>
+<span id="cb11-26"><a href="#cb11-26" tabindex="-1"></a><span class="co">#&gt;   student grade_letter grade_numeric</span></span>
+<span id="cb11-27"><a href="#cb11-27" tabindex="-1"></a><span class="co">#&gt; 1   Alice            A             4</span></span>
+<span id="cb11-28"><a href="#cb11-28" tabindex="-1"></a><span class="co">#&gt; 2     Bob            B             3</span></span>
+<span id="cb11-29"><a href="#cb11-29" tabindex="-1"></a><span class="co">#&gt; 3 Charlie            A             4</span></span>
+<span id="cb11-30"><a href="#cb11-30" tabindex="-1"></a><span class="co">#&gt; 4   Diana            C             2</span></span></code></pre></div>
+</div>
+</div>
+<div id="advanced-file-operations" class="section level2">
+<h2>💾 Advanced File Operations</h2>
+<div id="flexible-table-reading" class="section level3">
+<h3>Flexible Table Reading</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># Read various file formats with automatic detection</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>data1 <span class="ot">&lt;-</span> <span class="fu">read_table_flex</span>(<span class="st">&quot;data.csv&quot;</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>data2 <span class="ot">&lt;-</span> <span class="fu">read_table_flex</span>(<span class="st">&quot;data.tsv&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>data3 <span class="ot">&lt;-</span> <span class="fu">read_table_flex</span>(<span class="st">&quot;data.txt&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co"># Read Excel files with flexibility</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>excel_data <span class="ot">&lt;-</span> <span class="fu">read_excel_flex</span>(<span class="st">&quot;workbook.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;Sheet1&quot;</span>)</span></code></pre></div>
+</div>
+<div id="file-information-and-management" class="section level3">
+<h3>File Information and Management</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># Get comprehensive file information</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>info <span class="ot">&lt;-</span> <span class="fu">file_info</span>(<span class="st">&quot;myfile.csv&quot;</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="fu">print</span>(info)</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co"># Extract file extensions</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>files <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;data.csv&quot;</span>, <span class="st">&quot;analysis.R&quot;</span>, <span class="st">&quot;report.pdf&quot;</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>extensions <span class="ot">&lt;-</span> <span class="fu">sapply</span>(files, get_ext)</span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="fu">print</span>(extensions)</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co"># Display directory structure</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="fu">file_tree</span>(<span class="st">&quot;.&quot;</span>, <span class="at">max_depth =</span> <span class="dv">2</span>)</span></code></pre></div>
+</div>
+</div>
+<div id="custom-operators-for-data-processing" class="section level2">
+<h2>⚡ Custom Operators for Data Processing</h2>
+<div id="string-operations" class="section level3">
+<h3>String Operations</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># Paste operator for clean string concatenation</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>full_name <span class="ot">&lt;-</span> <span class="st">&quot;John&quot;</span> <span class="sc">%p%</span> <span class="st">&quot; &quot;</span> <span class="sc">%p%</span> <span class="st">&quot;Doe&quot;</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="fu">print</span>(full_name)</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;John   Doe&quot;</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>file_path <span class="ot">&lt;-</span> <span class="st">&quot;data&quot;</span> <span class="sc">%p%</span> <span class="st">&quot;/&quot;</span> <span class="sc">%p%</span> <span class="st">&quot;analysis&quot;</span> <span class="sc">%p%</span> <span class="st">&quot;.csv&quot;</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="fu">print</span>(file_path)</span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="co">#&gt; [1] &quot;data / analysis .csv&quot;</span></span></code></pre></div>
+</div>
+<div id="logical-operations" class="section level3">
+<h3>Logical Operations</h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co"># Enhanced &quot;not in&quot; operator</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>fruits <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;apple&quot;</span>, <span class="st">&quot;banana&quot;</span>, <span class="st">&quot;orange&quot;</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>check_fruits <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;apple&quot;</span>, <span class="st">&quot;grape&quot;</span>, <span class="st">&quot;banana&quot;</span>, <span class="st">&quot;kiwi&quot;</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="co"># Find fruits not in our list</span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>missing_fruits <span class="ot">&lt;-</span> check_fruits[check_fruits <span class="sc">%nin%</span> fruits]</span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;Missing fruits:&quot;</span>, <span class="fu">paste</span>(missing_fruits, <span class="at">collapse =</span> <span class="st">&quot;, &quot;</span>)))</span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Missing fruits: grape, kiwi&quot;</span></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co"># Enhanced identity checking</span></span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="fu">print</span>(<span class="dv">5</span> <span class="sc">%is%</span> <span class="dv">5</span>)        <span class="co"># TRUE</span></span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;a&quot;</span> <span class="sc">%is%</span> <span class="st">&quot;a&quot;</span>)    <span class="co"># TRUE</span></span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a><span class="fu">print</span>(<span class="dv">5</span> <span class="sc">%is%</span> <span class="st">&quot;5&quot;</span>)      <span class="co"># FALSE</span></span>
+<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
+</div>
+<div id="combinatorial-operations" class="section level3">
+<h3>Combinatorial Operations</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># Generate combinations and permutations</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>items <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;D&quot;</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="co"># Calculate combination numbers</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>combinations_count <span class="ot">&lt;-</span> <span class="fu">comb</span>(<span class="dv">4</span>, <span class="dv">2</span>)  <span class="co"># C(4,2) = 6</span></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;Number of ways to choose 2 items from 4:&quot;</span>, combinations_count))</span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Number of ways to choose 2 items from 4: 6&quot;</span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a><span class="co"># Calculate permutation numbers</span></span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>permutations_count <span class="ot">&lt;-</span> <span class="fu">perm</span>(<span class="dv">4</span>, <span class="dv">2</span>)  <span class="co"># P(4,2) = 12</span></span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;Number of ways to arrange 2 items from 4:&quot;</span>, permutations_count))</span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Number of ways to arrange 2 items from 4: 12&quot;</span></span></code></pre></div>
+</div>
+</div>
+<div id="complex-data-processing-workflows" class="section level2">
+<h2>🔗 Complex Data Processing Workflows</h2>
+<div id="real-world-example-survey-data-cleaning" class="section level3">
+<h3>Real-world Example: Survey Data Cleaning</h3>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># Simulate messy survey data</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>survey_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>  <span class="at">id =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>  <span class="at">age =</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="st">&quot;&quot;</span>, <span class="dv">30</span>, <span class="cn">NA</span>, <span class="st">&quot;35&quot;</span>, <span class="dv">28</span>, <span class="dv">0</span>, <span class="dv">45</span>),</span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>  <span class="at">income =</span> <span class="fu">c</span>(<span class="st">&quot;50000&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="cn">NA</span>, <span class="st">&quot;75000&quot;</span>, <span class="st">&quot;60000&quot;</span>, <span class="st">&quot;invalid&quot;</span>, <span class="st">&quot;80000&quot;</span>, <span class="st">&quot;&quot;</span>),</span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>  <span class="at">satisfaction =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">4</span>, <span class="st">&quot;&quot;</span>, <span class="dv">3</span>, <span class="cn">NA</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">2</span>),</span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a>)</span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Original messy survey data:&quot;</span>)</span>
+<span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Original messy survey data:&quot;</span></span>
+<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a><span class="fu">print</span>(survey_data)</span>
+<span id="cb17-13"><a href="#cb17-13" tabindex="-1"></a><span class="co">#&gt;   id  age  income satisfaction</span></span>
+<span id="cb17-14"><a href="#cb17-14" tabindex="-1"></a><span class="co">#&gt; 1  1   25   50000            5</span></span>
+<span id="cb17-15"><a href="#cb17-15" tabindex="-1"></a><span class="co">#&gt; 2  2                         4</span></span>
+<span id="cb17-16"><a href="#cb17-16" tabindex="-1"></a><span class="co">#&gt; 3  3   30    &lt;NA&gt;             </span></span>
+<span id="cb17-17"><a href="#cb17-17" tabindex="-1"></a><span class="co">#&gt; 4  4 &lt;NA&gt;   75000            3</span></span>
+<span id="cb17-18"><a href="#cb17-18" tabindex="-1"></a><span class="co">#&gt; 5  5   35   60000         &lt;NA&gt;</span></span>
+<span id="cb17-19"><a href="#cb17-19" tabindex="-1"></a><span class="co">#&gt; 6  6   28 invalid            5</span></span>
+<span id="cb17-20"><a href="#cb17-20" tabindex="-1"></a><span class="co">#&gt; 7  7    0   80000            4</span></span>
+<span id="cb17-21"><a href="#cb17-21" tabindex="-1"></a><span class="co">#&gt; 8  8   45                    2</span></span>
+<span id="cb17-22"><a href="#cb17-22" tabindex="-1"></a></span>
+<span id="cb17-23"><a href="#cb17-23" tabindex="-1"></a><span class="co"># Step 1: Identify problematic data</span></span>
+<span id="cb17-24"><a href="#cb17-24" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">Data quality assessment:</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb17-25"><a href="#cb17-25" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-26"><a href="#cb17-26" tabindex="-1"></a><span class="co">#&gt; Data quality assessment:</span></span>
+<span id="cb17-27"><a href="#cb17-27" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Columns with void values:&quot;</span>, <span class="fu">paste</span>(<span class="fu">cols_with_void</span>(survey_data), <span class="at">collapse =</span> <span class="st">&quot;, &quot;</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb17-28"><a href="#cb17-28" tabindex="-1"></a><span class="co">#&gt; Columns with void values: age, income, satisfaction</span></span>
+<span id="cb17-29"><a href="#cb17-29" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Rows with void values:&quot;</span>, <span class="fu">paste</span>(<span class="fu">rows_with_void</span>(survey_data), <span class="at">collapse =</span> <span class="st">&quot;, &quot;</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb17-30"><a href="#cb17-30" tabindex="-1"></a><span class="co">#&gt; Rows with void values: FALSE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, TRUE</span></span>
+<span id="cb17-31"><a href="#cb17-31" tabindex="-1"></a></span>
+<span id="cb17-32"><a href="#cb17-32" tabindex="-1"></a><span class="co"># Step 2: Clean the data</span></span>
+<span id="cb17-33"><a href="#cb17-33" tabindex="-1"></a><span class="co"># Replace void values with appropriate defaults</span></span>
+<span id="cb17-34"><a href="#cb17-34" tabindex="-1"></a>survey_clean <span class="ot">&lt;-</span> survey_data</span>
+<span id="cb17-35"><a href="#cb17-35" tabindex="-1"></a>survey_clean<span class="sc">$</span>age <span class="ot">&lt;-</span> <span class="fu">replace_void</span>(survey_clean<span class="sc">$</span>age, <span class="at">value =</span> <span class="st">&quot;25&quot;</span>)</span>
+<span id="cb17-36"><a href="#cb17-36" tabindex="-1"></a>survey_clean<span class="sc">$</span>income <span class="ot">&lt;-</span> <span class="fu">replace_void</span>(survey_clean<span class="sc">$</span>income, <span class="at">value =</span> <span class="st">&quot;50000&quot;</span>)</span>
+<span id="cb17-37"><a href="#cb17-37" tabindex="-1"></a>survey_clean<span class="sc">$</span>satisfaction <span class="ot">&lt;-</span> <span class="fu">replace_void</span>(survey_clean<span class="sc">$</span>satisfaction, <span class="at">value =</span> <span class="dv">3</span>)</span>
+<span id="cb17-38"><a href="#cb17-38" tabindex="-1"></a></span>
+<span id="cb17-39"><a href="#cb17-39" tabindex="-1"></a><span class="co"># Convert to appropriate types</span></span>
+<span id="cb17-40"><a href="#cb17-40" tabindex="-1"></a>survey_clean<span class="sc">$</span>age <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(survey_clean<span class="sc">$</span>age)</span>
+<span id="cb17-41"><a href="#cb17-41" tabindex="-1"></a>survey_clean<span class="sc">$</span>income <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(survey_clean<span class="sc">$</span>income)</span>
+<span id="cb17-42"><a href="#cb17-42" tabindex="-1"></a>survey_clean<span class="sc">$</span>satisfaction <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(survey_clean<span class="sc">$</span>satisfaction)</span>
+<span id="cb17-43"><a href="#cb17-43" tabindex="-1"></a></span>
+<span id="cb17-44"><a href="#cb17-44" tabindex="-1"></a><span class="co"># Handle special cases (e.g., age = 0, income = &quot;invalid&quot;)</span></span>
+<span id="cb17-45"><a href="#cb17-45" tabindex="-1"></a>survey_clean<span class="sc">$</span>age[survey_clean<span class="sc">$</span>age <span class="sc">==</span> <span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">25</span></span>
+<span id="cb17-46"><a href="#cb17-46" tabindex="-1"></a>survey_clean<span class="sc">$</span>income[<span class="fu">is.na</span>(survey_clean<span class="sc">$</span>income)] <span class="ot">&lt;-</span> <span class="dv">50000</span></span>
+<span id="cb17-47"><a href="#cb17-47" tabindex="-1"></a></span>
+<span id="cb17-48"><a href="#cb17-48" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Cleaned survey data:&quot;</span>)</span>
+<span id="cb17-49"><a href="#cb17-49" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Cleaned survey data:&quot;</span></span>
+<span id="cb17-50"><a href="#cb17-50" tabindex="-1"></a><span class="fu">print</span>(survey_clean)</span>
+<span id="cb17-51"><a href="#cb17-51" tabindex="-1"></a><span class="co">#&gt;   id age income satisfaction</span></span>
+<span id="cb17-52"><a href="#cb17-52" tabindex="-1"></a><span class="co">#&gt; 1  1  25  50000            5</span></span>
+<span id="cb17-53"><a href="#cb17-53" tabindex="-1"></a><span class="co">#&gt; 2  2  25  50000            4</span></span>
+<span id="cb17-54"><a href="#cb17-54" tabindex="-1"></a><span class="co">#&gt; 3  3  30  50000            3</span></span>
+<span id="cb17-55"><a href="#cb17-55" tabindex="-1"></a><span class="co">#&gt; 4  4  25  75000            3</span></span>
+<span id="cb17-56"><a href="#cb17-56" tabindex="-1"></a><span class="co">#&gt; 5  5  35  60000            3</span></span>
+<span id="cb17-57"><a href="#cb17-57" tabindex="-1"></a><span class="co">#&gt; 6  6  28  50000            5</span></span>
+<span id="cb17-58"><a href="#cb17-58" tabindex="-1"></a><span class="co">#&gt; 7  7  25  80000            4</span></span>
+<span id="cb17-59"><a href="#cb17-59" tabindex="-1"></a><span class="co">#&gt; 8  8  45  50000            2</span></span></code></pre></div>
+</div>
+</div>
+<div id="performance-tips" class="section level2">
+<h2>📈 Performance Tips</h2>
+<div id="efficient-void-handling" class="section level3">
+<h3>Efficient Void Handling</h3>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># For large datasets, check specific columns rather than entire data frame</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>large_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>  <span class="at">col1 =</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, <span class="cn">NA</span>), <span class="dv">1000</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>  <span class="at">col2 =</span> <span class="fu">sample</span>(<span class="fu">c</span>(letters, <span class="st">&quot;&quot;</span>), <span class="dv">1000</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a>  <span class="at">col3 =</span> <span class="fu">runif</span>(<span class="dv">1000</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a>)</span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a><span class="co"># Check only columns likely to have voids</span></span>
+<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a>critical_cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;col1&quot;</span>, <span class="st">&quot;col2&quot;</span>)</span>
+<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a>void_status <span class="ot">&lt;-</span> <span class="fu">sapply</span>(critical_cols, <span class="cf">function</span>(col) <span class="fu">any_void</span>(large_data[[col]]))</span>
+<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Void status for critical columns:&quot;</span>)</span>
+<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Void status for critical columns:&quot;</span></span>
+<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a><span class="fu">print</span>(void_status)</span>
+<span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a><span class="co">#&gt; col1 col2 </span></span>
+<span id="cb18-15"><a href="#cb18-15" tabindex="-1"></a><span class="co">#&gt; TRUE TRUE</span></span></code></pre></div>
+</div>
+</div>
+<div id="best-practices" class="section level2">
+<h2>🎯 Best Practices</h2>
+<ol style="list-style-type: decimal">
+<li><p><strong>Always inspect your data</strong> before processing using
+<code>cols_with_void()</code> and <code>rows_with_void()</code></p></li>
+<li><p><strong>Choose appropriate replacement values</strong> that make
+sense in your domain context</p></li>
+<li><p><strong>Document your void handling strategy</strong> for
+reproducibility</p></li>
+<li><p><strong>Use selective replacement</strong> when different types
+of voids should be handled differently</p></li>
+<li><p><strong>Validate your results</strong> after transformation to
+ensure data integrity</p></li>
+</ol>
+</div>
+<div id="next-steps" class="section level2">
+<h2>🔗 Next Steps</h2>
+<ul>
+<li>Explore <a href="color-palettes.html">Color Palettes guide</a> for
+plotting cleaned data</li>
+<li>Check out <a href="bioinformatics-workflows.html">Bioinformatics
+Workflows</a> for domain-specific processing</li>
+<li>Visit the <a href="color-palettes.html">Color Palettes guide</a> for
+visualization styling</li>
+</ul>
+<hr />
+<p><em>The evanverse data processing tools provide a robust foundation
+for handling real-world messy data with confidence and
+efficiency.</em></p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
