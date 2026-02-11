@@ -1,401 +1,326 @@
-## ----include = FALSE----------------------------------------------------------
+## ----setup, include = FALSE---------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
   fig.width = 10,
   fig.height = 6,
   dpi = 300,
   out.width = "100%"
 )
 
-## ----setup, message = FALSE---------------------------------------------------
 library(evanverse)
 library(ggplot2)
 library(dplyr)
 
-## ----palette-discovery--------------------------------------------------------
-# Get all available palettes by type
+## ----discover-palettes--------------------------------------------------------
+# List all palettes by type
 seq_palettes <- list_palettes(type = "sequential")
 qual_palettes <- list_palettes(type = "qualitative")
 div_palettes <- list_palettes(type = "diverging")
 
-cat("📈 Sequential Palettes (", length(seq_palettes), "):\n")
-cat(paste(seq_palettes, collapse = ", "), "\n\n")
+cat("Sequential Palettes (", length(seq_palettes), "):\n", sep = "")
+cat("  ", paste(head(seq_palettes, 5), collapse = ", "), "...\n\n", sep = "")
 
-cat("🏷️ Qualitative Palettes (", length(qual_palettes), "):\n")
-cat(paste(qual_palettes, collapse = ", "), "\n\n")
+cat("Qualitative Palettes (", length(qual_palettes), "):\n", sep = "")
+cat("  ", paste(head(qual_palettes, 5), collapse = ", "), "...\n\n", sep = "")
 
-cat("↔️ Diverging Palettes (", length(div_palettes), "):\n")
-cat(paste(div_palettes, collapse = ", "), "\n")
+cat("Diverging Palettes (", length(div_palettes), "):\n", sep = "")
+cat("  ", paste(div_palettes, collapse = ", "), "\n", sep = "")
 
-## ----palette-gallery, fig.cap="Complete gallery of all available palettes organized by type"----
+## ----palette-gallery, fig.cap="Complete gallery of all available palettes organized by type", fig.height=12----
 # Display the complete palette gallery
 bio_palette_gallery()
 
-## ----individual-palettes------------------------------------------------------
-# Get qualitative palette with default number of colors
-vivid_default <- get_palette("vividset", type = "qualitative")
-cat("Vivid palette (default):\n")
-print(vivid_default)
+## ----retrieve-palettes--------------------------------------------------------
+# Specify type explicitly for clarity
+vivid_colors <- get_palette("qual_vivid", type = "qualitative")
+cat("qual_vivid palette:\n")
+print(vivid_colors)
 
-# Get specific number of colors from sequential palette
-blues_3 <- get_palette("blues", type = "sequential", n = 3)
-cat("\nBlues palette (3 colors):\n")
+# Get specific number of colors
+blues_3 <- get_palette("seq_blues", type = "sequential", n = 3)
+cat("\nseq_blues (3 colors):\n")
 print(blues_3)
 
-# Get all available colors from a palette (just omit n parameter)
-blues_all <- get_palette("blues", type = "sequential")
-cat("\nBlues palette (all", length(blues_all), "colors):\n")
+# Get all available colors (omit n parameter)
+blues_all <- get_palette("seq_blues", type = "sequential")
+cat("\nseq_blues (all", length(blues_all), "colors):\n")
 print(blues_all)
 
-## ----palette-preview, fig.cap="Preview of different palette types with color swatches"----
+## ----preview-palettes, fig.cap="Preview of different palette types with color swatches"----
 # Save current par settings
 oldpar <- par(no.readonly = TRUE)
 
 # Preview different palette types
 par(mfrow = c(2, 2), mar = c(3, 1, 2, 1))
 
-# Qualitative palette preview
-preview_palette("vividset", type = "qualitative")
-title("Qualitative: VividSet", cex.main = 1.2, col.main = "#0D47A1")
+# Qualitative
+preview_palette("qual_vivid", type = "qualitative")
+title("Qualitative: qual_vivid", cex.main = 1, font.main = 1)
 
-# Sequential palette preview
-preview_palette("blues", type = "sequential")
-title("Sequential: Blues", cex.main = 1.2, col.main = "#0D47A1")
+# Sequential
+preview_palette("seq_blues", type = "sequential")
+title("Sequential: seq_blues", cex.main = 1, font.main = 1)
 
-# Another sequential palette
-preview_palette("warm_blush", type = "sequential")
-title("Sequential: Warm Blush", cex.main = 1.2, col.main = "#0D47A1")
+# Sequential - Another
+preview_palette("seq_forest", type = "sequential")
+title("Sequential: seq_forest", cex.main = 1, font.main = 1)
 
-# Diverging palette preview
-preview_palette("gradient_rd_bu", type = "diverging")
-title("Diverging: Red-Blue Gradient", cex.main = 1.2, col.main = "#0D47A1")
+# Diverging
+preview_palette("div_fireice", type = "diverging")
+title("Diverging: div_fireice", cex.main = 1, font.main = 1)
 
-# Restore previous par settings
+# Restore par settings
 par(oldpar)
 
-## ----custom-palettes----------------------------------------------------------
-# Define custom color schemes
-modern_colors <- c("#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4", "#FFEAA7")
-nature_colors <- c("#2E7D32", "#66BB6A", "#A5D6A7", "#E8F5E8")
-corporate_colors <- c("#0D47A1", "#1976D2", "#42A5F5", "#90CAF9", "#E3F2FD")
-
-# Create custom palettes (Note: this would save to package directory)
-# create_palette("modern_vivid", type = "qualitative", colors = modern_colors)
-# create_palette("nature_gradient", type = "sequential", colors = nature_colors)
-# create_palette("corporate_blue", type = "sequential", colors = corporate_colors)
-
-cat("Custom palette examples:\n")
-cat("Modern vivid:", paste(modern_colors, collapse = ", "), "\n")
-cat("Nature gradient:", paste(nature_colors, collapse = ", "), "\n")
-cat("Corporate blue:", paste(corporate_colors, collapse = ", "), "\n")
+## ----custom-creation, eval=FALSE----------------------------------------------
+# # Step 1: Determine palette type
+# # Is your data continuous (sequential),
+# # categorical (qualitative), or centered (diverging)?
+# 
+# # Step 2: Define colors
+# ocean_colors <- c("#006BA4", "#FF7F0E", "#2CA02C", "#D62728", "#9467BD")
+# 
+# # Step 3: Create palette with proper naming
+# create_palette(
+#   name = "qual_ocean",  # Follow type_name_source convention
+#   type = "qualitative",
+#   colors = ocean_colors,
+#   color_dir = system.file("extdata", "palettes", package = "evanverse")
+# )
+# 
+# # Step 4: Compile palettes.rds (see next section)
 
 ## ----color-utilities----------------------------------------------------------
-# Convert between HEX and RGB formats
+# Convert between HEX and RGB
 hex_colors <- c("#FF6B6B", "#4ECDC4", "#45B7D1")
 
-# HEX to RGB conversion
+# HEX to RGB
 rgb_matrix <- hex2rgb(hex_colors)
-cat("HEX to RGB conversion:\n")
+cat("HEX to RGB:\n")
 print(rgb_matrix)
 
-# RGB back to HEX conversion
+# RGB to HEX
 hex_back <- rgb2hex(rgb_matrix)
-cat("\nRGB back to HEX:\n")
-print(hex_back)
+cat("\nRGB to HEX:\n")
+cat(paste(hex_back, collapse = ", "), "\n")
 
-# Verify round-trip conversion
-cat("\nRound-trip verification:\n")
-print(data.frame(
-  Original = hex_colors,
-  Converted = hex_back,
-  Match = hex_colors == hex_back
-))
+## ----compile-workflow, eval=FALSE---------------------------------------------
+# # Compile all palettes from JSON to palettes.rds
+# compile_palettes(
+#   palettes_dir = system.file("extdata", "palettes", package = "evanverse"),
+#   output_rds = system.file("extdata", "palettes.rds", package = "evanverse")
+# )
+# 
+# # Test the new palette
+# get_palette("qual_ocean")
+# preview_palette("qual_ocean", type = "qualitative")
 
-## ----qual-demo, fig.cap="Demonstration of qualitative palettes for categorical data visualization"----
+## ----qual-example, fig.cap="Qualitative palette for categorical group comparison"----
 # Sample categorical data
 set.seed(123)
 category_data <- data.frame(
   Group = rep(LETTERS[1:5], each = 20),
   Value = c(rnorm(20, 10, 2), rnorm(20, 15, 3), rnorm(20, 12, 2.5),
-            rnorm(20, 18, 4), rnorm(20, 8, 1.5)),
-  Type = sample(c("Control", "Treatment"), 100, replace = TRUE)
+            rnorm(20, 18, 4), rnorm(20, 8, 1.5))
 )
 
-# Use qualitative palette for groups
-qual_colors <- get_palette("vividset", type = "qualitative", n = 5)
+# Use qualitative palette
+qual_colors <- get_palette("qual_vivid", type = "qualitative", n = 5)
 
-p1 <- ggplot(category_data, aes(x = Group, y = Value, fill = Group)) +
+ggplot(category_data, aes(x = Group, y = Value, fill = Group)) +
   geom_boxplot(alpha = 0.8, outlier.alpha = 0.6) +
   scale_fill_manual(values = qual_colors) +
   labs(
     title = "Qualitative Palette: Group Comparison",
-    subtitle = "Using vividset palette for categorical data",
+    subtitle = "Using qual_vivid for categorical groups",
     x = "Experimental Group",
     y = "Measured Value"
   ) +
   theme_minimal() +
-  theme(
-    legend.position = "none",
-    plot.title = element_text(size = 14, face = "bold", color = "#0D47A1"),
-    plot.subtitle = element_text(size = 11, color = "#666666")
-  )
+  theme(legend.position = "none")
 
-print(p1)
-
-## ----seq-demo, fig.cap="Sequential palette demonstration with heatmap-style visualization"----
-# Generate correlation matrix data
+## ----seq-example, fig.cap="Sequential palette for continuous heatmap data"----
+# Generate expression matrix
 set.seed(456)
-vars <- paste0("Var", 1:8)
-cor_matrix <- cor(matrix(rnorm(8 * 50), ncol = 8))
-colnames(cor_matrix) <- rownames(cor_matrix) <- vars
+genes <- paste0("Gene", 1:10)
+samples <- paste0("S", 1:8)
+expr_matrix <- matrix(rnorm(80, mean = 5, sd = 2), nrow = 10)
+rownames(expr_matrix) <- genes
+colnames(expr_matrix) <- samples
 
-# Convert to long format for ggplot
-cor_long <- expand.grid(X = vars, Y = vars)
-cor_long$Correlation <- as.vector(cor_matrix)
+# Convert to long format
+expr_long <- expand.grid(Gene = genes, Sample = samples)
+expr_long$Expression <- as.vector(expr_matrix)
 
 # Use sequential palette
-seq_colors <- get_palette("ggsci_locuszoom", type = "sequential", n = 7)
+seq_colors <- get_palette("seq_mobility", type = "sequential")
 
-p2 <- ggplot(cor_long, aes(x = X, y = Y, fill = Correlation)) +
-  geom_tile(color = "white", size = 0.5) +
+ggplot(expr_long, aes(x = Sample, y = Gene, fill = Expression)) +
+  geom_tile(color = "white", linewidth = 0.5) +
   scale_fill_gradientn(
     colors = seq_colors,
-    name = "Correlation",
-    limits = c(-1, 1),
-    breaks = seq(-1, 1, 0.5),
-    labels = c("-1.0", "-0.5", "0.0", "0.5", "1.0")
+    name = "Expression"
   ) +
   labs(
-    title = "Sequential Palette: Correlation Heatmap",
-    subtitle = "Using ggsci_locuszoom palette for continuous correlation data",
-    x = "Variables",
-    y = "Variables"
+    title = "Sequential Palette: Gene Expression Heatmap",
+    subtitle = "Using seq_blues for continuous expression data"
   ) +
   theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    plot.title = element_text(size = 14, face = "bold", color = "#0D47A1"),
-    plot.subtitle = element_text(size = 11, color = "#666666"),
-    panel.grid = element_blank()
-  ) +
-  coord_fixed()
+  theme(panel.grid = element_blank())
 
-print(p2)
-
-## ----div-demo, fig.cap="Diverging palette showing data with meaningful center point"----
-# Generate data with meaningful center (e.g., fold changes)
+## ----div-example, fig.cap="Diverging palette for fold change data"------------
+# Generate fold change data
 set.seed(789)
-gene_data <- data.frame(
-  Gene = paste0("Gene_", 1:25),
-  LogFoldChange = rnorm(25, 0, 1.5),
-  Sample = rep(paste0("Sample_", 1:5), each = 5)
+fc_data <- data.frame(
+  Gene = paste0("Gene_", 1:20),
+  LogFC = rnorm(20, 0, 1.2),
+  Sample = rep(paste0("Sample_", 1:4), each = 5)
 )
 
 # Use diverging palette
-div_colors <- get_palette("gradient_rd_bu", type = "diverging", n = 11)
+div_colors <- get_palette("div_fireice", type = "diverging")
 
-p3 <- ggplot(gene_data, aes(x = Sample, y = Gene, fill = LogFoldChange)) +
-  geom_tile(color = "white", size = 0.3) +
+ggplot(fc_data, aes(x = Sample, y = Gene, fill = LogFC)) +
+  geom_tile(color = "white", linewidth = 0.3) +
   scale_fill_gradientn(
     colors = div_colors,
     name = "Log2 FC",
-    limits = c(-3, 3),
-    breaks = seq(-3, 3, 1.5),
-    labels = c("-3", "-1.5", "0", "+1.5", "+3")
+    limits = c(-3, 3)
   ) +
   labs(
-    title = "Diverging Palette: Gene Expression Changes",
-    subtitle = "Using red-blue palette for fold change data (centered at 0)",
-    x = "Sample",
-    y = "Gene"
+    title = "Diverging Palette: Fold Changes",
+    subtitle = "Using div_fireice for centered data (zero midpoint)"
   ) +
   theme_minimal() +
-  theme(
-    plot.title = element_text(size = 14, face = "bold", color = "#0D47A1"),
-    plot.subtitle = element_text(size = 11, color = "#666666"),
-    panel.grid = element_blank(),
-    axis.text.y = element_text(size = 8)
-  )
+  theme(panel.grid = element_blank())
 
-print(p3)
-
-## ----bio-guidelines-----------------------------------------------------------
-cat("🧬 BIOINFORMATICS PALETTE GUIDELINES\n")
-cat("=====================================\n\n")
-
-cat("📊 For Gene Expression Data:\n")
-cat("  • Sequential: Use 'blues', 'greens', or 'oranges'\n")
-cat("  • Diverging: Use 'gradient_rd_bu' or 'earthy_diverge' for fold changes\n\n")
-
-cat("🔬 For Pathway Analysis:\n")
-cat("  • Qualitative: Use 'vividset' or 'softpastel' for pathways\n")
-cat("  • Sequential: Use 'purples' for p-value gradients\n\n")
-
-cat("🎯 For Multi-omics Data:\n")
-cat("  • Qualitative: Use 'brightcontrast' for distinct data types\n")
-cat("  • Avoid red/green combinations for colorblind accessibility\n\n")
-
-cat("📈 For Time Course Data:\n")
-cat("  • Sequential: Use 'blues' or 'teals' for temporal progression\n")
-cat("  • Qualitative: Use 'vividset' for treatment groups\n")
-
-## ----multiomics-demo, fig.cap="Multi-omics data visualization using appropriate color palettes"----
+## ----multiomics-example, fig.cap="Multi-omics visualization with appropriate palette selection"----
 # Simulate multi-omics data
 set.seed(321)
-multiomics_data <- data.frame(
-  Sample = rep(paste0("Patient_", 1:12), each = 4),
-  DataType = rep(c("RNA-seq", "Proteomics", "Metabolomics", "Methylation"), 12),
+omics_data <- data.frame(
+  Sample = rep(paste0("P", 1:8), each = 3),
+  DataType = rep(c("Transcriptome", "Proteome", "Metabolome"), 8),
   Intensity = c(
-    rnorm(12, 100, 20),  # RNA-seq
-    rnorm(12, 50, 15),   # Proteomics
-    rnorm(12, 25, 8),    # Metabolomics
-    rnorm(12, 75, 12)    # Methylation
+    rnorm(8, 100, 20),  # Transcriptome
+    rnorm(8, 50, 15),   # Proteome
+    rnorm(8, 25, 8)     # Metabolome
   ),
-  Condition = rep(rep(c("Control", "Disease"), each = 6), 4)
+  Condition = rep(rep(c("Control", "Treatment"), each = 4), 3)
 )
 
-# Use distinct qualitative palette for data types
-omics_colors <- get_palette("vividset", type = "qualitative", n = 4)
-names(omics_colors) <- c("RNA-seq", "Proteomics", "Metabolomics", "Methylation")
+# Use qualitative palette for data types
+omics_colors <- get_palette("qual_vivid", type = "qualitative", n = 3)
+names(omics_colors) <- c("Transcriptome", "Proteome", "Metabolome")
 
-p4 <- ggplot(multiomics_data, aes(x = Sample, y = Intensity, fill = DataType)) +
-  geom_bar(stat = "identity", position = "dodge", alpha = 0.8) +
-  scale_fill_manual(values = omics_colors, name = "Data Type") +
+ggplot(omics_data, aes(x = Sample, y = Intensity, fill = DataType)) +
+  geom_bar(stat = "identity", position = "dodge", alpha = 0.85) +
+  scale_fill_manual(values = omics_colors) +
   facet_wrap(~Condition, scales = "free_x") +
   labs(
     title = "Multi-omics Data Integration",
-    subtitle = "Using qualitative palette to distinguish data types",
+    subtitle = "Using qual_vivid to distinguish omics layers",
     x = "Patient Samples",
     y = "Normalized Intensity"
   ) +
   theme_minimal() +
   theme(
-    axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
-    plot.title = element_text(size = 14, face = "bold", color = "#0D47A1"),
-    plot.subtitle = element_text(size = 11, color = "#666666"),
-    legend.position = "bottom",
-    strip.background = element_rect(fill = "#E3F2FD", color = NA)
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 9),
+    legend.position = "bottom"
   )
 
-print(p4)
+## ----interpolation, fig.cap="Creating custom gradients through color interpolation"----
+# Get base colors from qualitative palette
+base_colors <- get_palette("qual_vivid", type = "qualitative", n = 3)
 
-## ----advanced-techniques, fig.cap="Advanced color techniques: interpolation and custom gradients"----
-# Create custom gradient using palette interpolation
-base_colors <- get_palette("vividset", type = "qualitative", n = 3)
-
-# Manual interpolation demonstration
+# Interpolate to create smooth gradient
 custom_gradient <- colorRampPalette(base_colors[1:2])(10)
 
-# Create visualization showing interpolation
-gradient_demo <- data.frame(
+# Visualize the gradient
+gradient_df <- data.frame(
   x = 1:10,
   y = rep(1, 10),
   color = custom_gradient
 )
 
-p5 <- ggplot(gradient_demo, aes(x = x, y = y, fill = color)) +
+ggplot(gradient_df, aes(x = x, y = y, fill = color)) +
   geom_tile(height = 0.5, width = 0.9) +
   scale_fill_identity() +
   labs(
     title = "Custom Color Interpolation",
-    subtitle = "Creating gradients from qualitative palette colors",
-    x = "Gradient Position",
-    y = ""
+    subtitle = "Creating gradients from qualitative palette colors"
   ) +
-  theme_minimal() +
-  theme(
-    axis.text.y = element_blank(),
-    axis.ticks.y = element_blank(),
-    panel.grid = element_blank(),
-    plot.title = element_text(size = 14, face = "bold", color = "#0D47A1"),
-    plot.subtitle = element_text(size = 11, color = "#666666")
-  )
+  theme_void() +
+  theme(plot.title = element_text(hjust = 0.5))
 
-print(p5)
+## ----combinations, eval=FALSE-------------------------------------------------
+# # Combine palettes for complex visualizations
+# main_colors <- get_palette("qual_vivid", n = 4)
+# accent_color <- get_palette("div_fireice", n = 1)
+# 
+# # Use in multi-layer plots
+# ggplot(data) +
+#   geom_point(aes(color = group), size = 3) +
+#   geom_smooth(color = accent_color, linewidth = 1.5) +
+#   scale_color_manual(values = main_colors)
 
-# Display the gradient colors
-cat("Custom gradient colors:\n")
-print(custom_gradient)
+## ----performance-tips, eval=FALSE---------------------------------------------
+# # ✅ GOOD: Cache palette once
+# my_colors <- get_palette("qual_vivid", n = 5)
+# ggplot(data) + scale_fill_manual(values = my_colors)
+# 
+# # ❌ AVOID: Repeated calls
+# ggplot(data) + scale_fill_manual(values = get_palette("qual_vivid", n = 5))
 
-## ----accessibility------------------------------------------------------------
-cat("♿ ACCESSIBILITY & BEST PRACTICES\n")
-cat("================================\n\n")
+## ----troubleshoot-1, eval=FALSE-----------------------------------------------
+# # Check available palettes
+# list_palettes(type = "qualitative")
 
-cat("🌈 Color Vision Considerations:\n")
-cat("  • Test palettes with colorblind simulators\n")
-cat("  • Avoid relying solely on red/green distinctions\n")
-cat("  • Use high contrast ratios (minimum 3:1)\n")
-cat("  • Consider texture/pattern alternatives\n\n")
+## ----troubleshoot-2, eval=FALSE-----------------------------------------------
+# # Check palette size
+# length(get_palette("qual_vivid"))
+# 
+# # Or use interpolation
+# colorRampPalette(get_palette("qual_vivid"))(20)
 
-cat("📱 Multi-Platform Compatibility:\n")
-cat("  • Test on different displays (mobile, print, projector)\n")
-cat("  • Use sufficient color separation for small elements\n")
-cat("  • Consider grayscale conversion compatibility\n\n")
+## ----troubleshoot-3, eval=FALSE-----------------------------------------------
+# # Verify palette type
+# # Type is inferred from name prefix
+# get_palette("seq_blues")  # Automatically knows it's sequential
 
-cat("📊 Data Visualization Guidelines:\n")
-cat("  • Match palette type to data type (sequential/categorical)\n")
-cat("  • Limit qualitative palettes to 8-10 distinct categories\n")
-cat("  • Use consistent color meaning across related plots\n")
-cat("  • Reserve bright colors for important data points\n")
+## ----troubleshoot-4, eval=FALSE-----------------------------------------------
+# # Ensure you compiled after creation
+# compile_palettes(
+#   palettes_dir = system.file("extdata", "palettes", package = "evanverse"),
+#   output_rds = system.file("extdata", "palettes.rds", package = "evanverse")
+# )
 
-## ----performance--------------------------------------------------------------
-cat("⚡ PERFORMANCE OPTIMIZATION TIPS\n")
-cat("===============================\n\n")
-
-cat("🚀 Efficient Palette Usage:\n")
-cat("  • Cache frequently used palettes in variables\n")
-cat("  • Use specific n= parameter to avoid unused colors\n")
-cat("  • Pre-compile custom palettes for repeated use\n\n")
-
-# Demonstrate efficient palette caching
-cat("Example of efficient palette caching:\n")
-cat("# Good: Cache palette once\n")
-cat("my_colors <- get_palette('vividset', type = 'qualitative', n = 5)\n")
-cat("# Then reuse: scale_fill_manual(values = my_colors)\n\n")
-
-cat("# Avoid: Repeated palette calls\n")
-cat("# scale_fill_manual(values = get_palette('vividset', ...))\n")
-
-## ----troubleshooting----------------------------------------------------------
-cat("🛠️ TROUBLESHOOTING GUIDE\n")
-cat("=======================\n\n")
-
-cat("❌ Issue: 'Palette not found' error\n")
-cat("✅ Solution: Check available palettes with list_palettes()\n\n")
-
-cat("❌ Issue: Not enough colors in palette\n")
-cat("✅ Solution: Use n='all' or choose different palette\n\n")
-
-cat("❌ Issue: Colors don't match expected output\n")
-cat("✅ Solution: Verify palette type (sequential/qualitative/diverging)\n\n")
-
-cat("❌ Issue: Custom palette not saving\n")
-cat("✅ Solution: Check write permissions and file paths\n\n")
-
-# Demonstrate error handling
-tryCatch({
-  # This will work
-  valid_palette <- get_palette("vividset", type = "qualitative", n = 3)
-  cat("✅ Successfully retrieved vividset palette\n")
-}, error = function(e) {
-  cat("❌ Error:", e$message, "\n")
-})
-
-tryCatch({
-  # This might fail if palette doesn't exist
-  invalid_palette <- get_palette("nonexistent", type = "qualitative")
-  cat("✅ Retrieved nonexistent palette\n")
-}, error = function(e) {
-  cat("❌ Expected error for nonexistent palette:", e$message, "\n")
-})
-
-## ----quick-ref, eval = FALSE--------------------------------------------------
-# # Essential color palette functions
-# list_palettes(type = "sequential")          # List available palettes
-# get_palette("blues", type = "sequential")   # Get specific palette
-# preview_palette("vividset", "qualitative")  # Preview colors
-# bio_palette_gallery()                       # Show all palettes
-# hex2rgb("#FF6B6B")                         # Convert colors
-# create_palette("custom", colors = c(...))   # Create custom palette
+## ----quick-reference, eval=FALSE----------------------------------------------
+# # Discover
+# list_palettes(type = "sequential")
+# bio_palette_gallery()
+# 
+# # Retrieve
+# get_palette("seq_blues")
+# preview_palette("qual_vivid", type = "qualitative")
+# 
+# # Create
+# create_palette(
+#   name = "qual_custom",
+#   type = "qualitative",
+#   colors = c("#E64B35", "#4DBBD5", "#00A087")
+# )
+# 
+# # Compile
+# compile_palettes(
+#   palettes_dir = system.file("extdata", "palettes", package = "evanverse"),
+#   output_rds = system.file("extdata", "palettes.rds", package = "evanverse")
+# )
+# 
+# # Utilities
+# hex2rgb("#FF6B6B")
+# rgb2hex(matrix(c(255, 107, 107), nrow = 1))
 

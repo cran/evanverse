@@ -153,7 +153,7 @@ venn_plot <- plot_venn(
   set2 = pathway_genes[[2]],
   set3 = pathway_genes[[3]],
   category.names = names(pathway_genes),
-  fill = get_palette("vividset", type = "qualitative", n = 3),
+  fill = get_palette("qual_vivid", type = "qualitative", n = 3),
   title = "Metabolic Pathway Gene Overlaps"
 )
 
@@ -206,8 +206,8 @@ gene_results$Regulation[gene_results$FDR < 0.05 & gene_results$LogFC < -1] <- "D
 
 # Create volcano plot
 volcano_colors <- c(
-  "Up-regulated" = get_palette("vividset", type = "qualitative", n = 3)[1],
-  "Down-regulated" = get_palette("vividset", type = "qualitative", n = 3)[2],
+  "Up-regulated" = get_palette("qual_vivid", type = "qualitative", n = 3)[1],
+  "Down-regulated" = get_palette("qual_vivid", type = "qualitative", n = 3)[2],
   "Not Significant" = "#CCCCCC"
 )
 
@@ -264,7 +264,7 @@ enrichment_results$EnrichmentScore <- -log10(enrichment_results$FDR)
 p2 <- ggplot(enrichment_results, aes(x = GeneRatio, y = reorder(Pathway, EnrichmentScore))) +
   geom_point(aes(color = EnrichmentScore, size = GeneCount), alpha = 0.8) +
   scale_color_gradientn(
-    colors = get_palette("warm_blush", type = "sequential", n = 4),
+    colors = get_palette("seq_blush", type = "sequential", n = 4),
     name = "-log₁₀(FDR)"
   ) +
   scale_size_continuous(name = "Gene Count", range = c(3, 12)) +
@@ -320,7 +320,7 @@ omics_data$Normalized_Value <- ave(omics_data$Value, omics_data$DataType,
 p3 <- ggplot(omics_data, aes(x = DataType, y = Gene, fill = Normalized_Value)) +
   geom_tile(color = "white", size = 0.5) +
   scale_fill_gradientn(
-    colors = get_palette("gradient_rd_bu", type = "diverging", n = 11),
+    colors = get_palette("div_contrast", type = "diverging"),
     name = "Z-score",
     limits = c(-2, 2),
     breaks = c(-2, -1, 0, 1, 2)
@@ -354,43 +354,6 @@ summary_stats <- omics_data %>%
     .groups = 'drop'
   )
 print(summary_stats)
-
-## ----survival-analysis, fig.cap="Forest plot showing hazard ratios for genetic markers in survival analysis"----
-# Simulate survival analysis results
-survival_data <- data.frame(
-  Gene = c("BRCA1", "BRCA2", "TP53", "EGFR", "MYC", "KRAS", "PIK3CA", "AKT1"),
-  HazardRatio = c(1.23, 0.87, 1.45, 1.12, 0.92, 1.67, 1.34, 0.78),
-  CI_Lower = c(0.98, 0.71, 1.18, 0.89, 0.75, 1.32, 1.05, 0.61),
-  CI_Upper = c(1.55, 1.07, 1.78, 1.41, 1.13, 2.11, 1.71, 0.99),
-  PValue = c(0.067, 0.189, 0.001, 0.324, 0.445, 0.0001, 0.018, 0.041),
-  stringsAsFactors = FALSE
-)
-
-# Add significance categories
-survival_data$Significance <- ifelse(survival_data$PValue < 0.001, "***",
-                            ifelse(survival_data$PValue < 0.01, "**",
-                            ifelse(survival_data$PValue < 0.05, "*", "ns")))
-
-# Create forest plot using evanverse plotting functions
-p4 <- plot_forest(
-  data = survival_data,
-  label_col = "Gene",
-  estimate_col = "HazardRatio",
-  lower_col = "CI_Lower",
-  upper_col = "CI_Upper",
-  p_col = "PValue"
-)
-
-print(p4)
-
-cat("\n🎯 Survival Analysis Summary:\n")
-cat("=============================\n")
-significant_genes <- survival_data[survival_data$PValue < 0.05, ]
-cat("Significant prognostic markers:", nrow(significant_genes), "\n")
-cat("Risk factors (HR > 1):", sum(significant_genes$HazardRatio > 1), "\n")
-cat("Protective factors (HR < 1):", sum(significant_genes$HazardRatio < 1), "\n")
-
-print(significant_genes[, c("Gene", "HazardRatio", "PValue", "Significance")])
 
 ## ----biomarker-discovery, fig.cap="Biomarker discovery showing gene expression patterns across clinical subtypes"----
 # Simulate clinical biomarker data
@@ -448,7 +411,7 @@ p5 <- ggplot(plot_data, aes(x = Subtype, y = Expression, fill = Subtype)) +
   geom_boxplot(alpha = 0.7, outlier.alpha = 0.5) +
   geom_jitter(alpha = 0.3, width = 0.2, size = 0.8) +
   scale_fill_manual(
-    values = get_palette("vividset", type = "qualitative", n = 4)
+    values = get_palette("qual_vivid", type = "qualitative", n = 4)
   ) +
   facet_wrap(~Biomarker, scales = "free_y", ncol = 2) +
   labs(
@@ -622,7 +585,7 @@ pipeline_steps <- data.frame(
     "Built-in R functions",
     "gmt2df(), gmt2list()",
     "plot_venn(), combine_logic()",
-    "plot_forest(), get_palette()",
+    "get_palette(), plot_*() functions",
     "write_xlsx_flex(), remind()"
   ),
   Estimated_Time = c("5-10 min", "10-15 min", "30-60 min", "5 min",
@@ -644,11 +607,11 @@ cat("  • Clear documentation and visualization\n")
 # 
 # # Pathway analysis
 # pathways <- gmt2list("pathways.gmt")
-# plot_venn(gene_sets, colors = get_palette("vividset"))
+# plot_venn(gene_sets, colors = get_palette("qual_vivid"))
 # 
 # # Data visualization
-# plot_forest(survival_data, hr_col = "HazardRatio")
-# get_palette("gradient_rd_bu", type = "diverging", n = 11)
+# get_palette("div_contrast", type = "diverging")
+# plot_venn(gene_sets)
 # 
 # # Data management
 # download_geo_data("GSE123456")

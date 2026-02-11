@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Installation Guide</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Installation Guide</h1>
+
+
+
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>This guide covers all installation methods for
+<strong>evanverse</strong>, including system requirements, dependencies,
+and troubleshooting.</p>
+<hr />
+</div>
+<div id="quick-install" class="section level2">
+<h2>Quick Install</h2>
+<div id="from-cran-recommended" class="section level3">
+<h3>From CRAN (Recommended)</h3>
+<p>The stable release is available on CRAN:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;evanverse&quot;</span>)</span></code></pre></div>
+</div>
+<div id="from-github-development-version" class="section level3">
+<h3>From GitHub (Development Version)</h3>
+<p>For the latest features and bug fixes:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Install devtools if needed</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co"># Install evanverse</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;evanbio/evanverse&quot;</span>)</span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="system-requirements" class="section level2">
+<h2>System Requirements</h2>
+<ul>
+<li><strong>R Version</strong>: ≥ 4.1.0</li>
+<li><strong>Operating Systems</strong>: Windows, macOS, Linux</li>
+<li><strong>Internet Connection</strong>: Required for initial
+installation and some functions</li>
+</ul>
+<hr />
+</div>
+<div id="dependencies" class="section level2">
+<h2>Dependencies</h2>
+<p>evanverse depends on several packages that will be automatically
+installed:</p>
+<div id="core-dependencies" class="section level3">
+<h3>Core Dependencies</h3>
+<ul>
+<li><strong>tidyverse</strong> — Data manipulation and
+visualization</li>
+<li><strong>data.table</strong> — Fast data processing</li>
+<li><strong>jsonlite</strong> — JSON handling for color palettes</li>
+</ul>
+</div>
+<div id="bioinformatics-dependencies" class="section level3">
+<h3>Bioinformatics Dependencies</h3>
+<ul>
+<li><strong>Biobase</strong> — Bioconductor infrastructure</li>
+<li><strong>GSEABase</strong> — Gene set analysis</li>
+<li><strong>biomaRt</strong> — Gene ID conversion</li>
+</ul>
+</div>
+<div id="visualization-dependencies" class="section level3">
+<h3>Visualization Dependencies</h3>
+<ul>
+<li><strong>ggplot2</strong> — Plotting framework</li>
+<li><strong>VennDiagram</strong> — Venn diagram generation</li>
+<li><strong>ggVennDiagram</strong> — Modern Venn diagrams</li>
+</ul>
+</div>
+<div id="utility-dependencies" class="section level3">
+<h3>Utility Dependencies</h3>
+<ul>
+<li><strong>cli</strong> — Command-line interface</li>
+<li><strong>fs</strong> — File system operations</li>
+<li><strong>curl</strong> — URL downloads</li>
+<li><strong>openxlsx</strong> — Excel file handling</li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="installation-options" class="section level2">
+<h2>Installation Options</h2>
+<div id="minimal-installation" class="section level3">
+<h3>Minimal Installation</h3>
+<p>Install without suggested packages:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;evanverse&quot;</span>, <span class="at">dependencies =</span> <span class="fu">c</span>(<span class="st">&quot;Depends&quot;</span>, <span class="st">&quot;Imports&quot;</span>))</span></code></pre></div>
+</div>
+<div id="full-installation" class="section level3">
+<h3>Full Installation</h3>
+<p>Install with all suggested packages for complete functionality:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;evanverse&quot;</span>, <span class="at">dependencies =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</div>
+<div id="install-specific-version" class="section level3">
+<h3>Install Specific Version</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># Install a specific version from CRAN</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_version</span>(<span class="st">&quot;evanverse&quot;</span>, <span class="at">version =</span> <span class="st">&quot;0.3.7&quot;</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co"># Install from a specific GitHub release</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;evanbio/evanverse@v0.3.7&quot;</span>)</span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="bioconductor-dependencies" class="section level2">
+<h2>Bioconductor Dependencies</h2>
+<p>Some bioinformatics functions require Bioconductor packages. Install
+them separately:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Install BiocManager if needed</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">&quot;BiocManager&quot;</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>    <span class="fu">install.packages</span>(<span class="st">&quot;BiocManager&quot;</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co"># Install Bioconductor dependencies</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="fu">c</span>(<span class="st">&quot;Biobase&quot;</span>, <span class="st">&quot;GSEABase&quot;</span>, <span class="st">&quot;biomaRt&quot;</span>, <span class="st">&quot;GEOquery&quot;</span>))</span></code></pre></div>
+<hr />
+</div>
+<div id="verify-installation" class="section level2">
+<h2>Verify Installation</h2>
+<p>After installation, verify that evanverse is working correctly:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Load the package</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">library</span>(evanverse)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co"># Check version</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="fu">packageVersion</span>(<span class="st">&quot;evanverse&quot;</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; [1] &#39;0.4.0&#39;</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co"># List available functions</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="fu">pkg_functions</span>(<span class="st">&quot;evanverse&quot;</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; ── Package: evanverse ──</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; ℹ Matched exported names: 65</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; %is%</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; %map%</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt; %match%</span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&gt; %nin%</span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="co">#&gt; %p%</span></span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="co">#&gt; any_void</span></span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a><span class="co">#&gt; bio_palette_gallery</span></span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="co">#&gt; check_pkg</span></span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="co">#&gt; clear_palette_cache</span></span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="co">#&gt; cols_with_void</span></span>
+<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a><span class="co">#&gt; comb</span></span>
+<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a><span class="co">#&gt; combine_logic</span></span>
+<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a><span class="co">#&gt; compile_palettes</span></span>
+<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a><span class="co">#&gt; convert_gene_id</span></span>
+<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a><span class="co">#&gt; create_palette</span></span>
+<span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a><span class="co">#&gt; df2list</span></span>
+<span id="cb7-30"><a href="#cb7-30" tabindex="-1"></a><span class="co">#&gt; download_batch</span></span>
+<span id="cb7-31"><a href="#cb7-31" tabindex="-1"></a><span class="co">#&gt; download_gene_ref</span></span>
+<span id="cb7-32"><a href="#cb7-32" tabindex="-1"></a><span class="co">#&gt; download_geo_data</span></span>
+<span id="cb7-33"><a href="#cb7-33" tabindex="-1"></a><span class="co">#&gt; download_url</span></span>
+<span id="cb7-34"><a href="#cb7-34" tabindex="-1"></a><span class="co">#&gt; drop_void</span></span>
+<span id="cb7-35"><a href="#cb7-35" tabindex="-1"></a><span class="co">#&gt; file_info</span></span>
+<span id="cb7-36"><a href="#cb7-36" tabindex="-1"></a><span class="co">#&gt; file_tree</span></span>
+<span id="cb7-37"><a href="#cb7-37" tabindex="-1"></a><span class="co">#&gt; get_ext</span></span>
+<span id="cb7-38"><a href="#cb7-38" tabindex="-1"></a><span class="co">#&gt; get_palette</span></span>
+<span id="cb7-39"><a href="#cb7-39" tabindex="-1"></a><span class="co">#&gt; gmt2df</span></span>
+<span id="cb7-40"><a href="#cb7-40" tabindex="-1"></a><span class="co">#&gt; gmt2list</span></span>
+<span id="cb7-41"><a href="#cb7-41" tabindex="-1"></a><span class="co">#&gt; hex2rgb</span></span>
+<span id="cb7-42"><a href="#cb7-42" tabindex="-1"></a><span class="co">#&gt; inst_pkg</span></span>
+<span id="cb7-43"><a href="#cb7-43" tabindex="-1"></a><span class="co">#&gt; is_void</span></span>
+<span id="cb7-44"><a href="#cb7-44" tabindex="-1"></a><span class="co">#&gt; list_palettes</span></span>
+<span id="cb7-45"><a href="#cb7-45" tabindex="-1"></a><span class="co">#&gt; map_column</span></span>
+<span id="cb7-46"><a href="#cb7-46" tabindex="-1"></a><span class="co">#&gt; palette_cache_info</span></span>
+<span id="cb7-47"><a href="#cb7-47" tabindex="-1"></a><span class="co">#&gt; perm</span></span>
+<span id="cb7-48"><a href="#cb7-48" tabindex="-1"></a><span class="co">#&gt; pkg_functions</span></span>
+<span id="cb7-49"><a href="#cb7-49" tabindex="-1"></a><span class="co">#&gt; pkg_version</span></span>
+<span id="cb7-50"><a href="#cb7-50" tabindex="-1"></a><span class="co">#&gt; plot_bar</span></span>
+<span id="cb7-51"><a href="#cb7-51" tabindex="-1"></a><span class="co">#&gt; plot_density</span></span>
+<span id="cb7-52"><a href="#cb7-52" tabindex="-1"></a><span class="co">#&gt; plot_forest</span></span>
+<span id="cb7-53"><a href="#cb7-53" tabindex="-1"></a><span class="co">#&gt; plot_pie</span></span>
+<span id="cb7-54"><a href="#cb7-54" tabindex="-1"></a><span class="co">#&gt; plot_venn</span></span>
+<span id="cb7-55"><a href="#cb7-55" tabindex="-1"></a><span class="co">#&gt; preview_palette</span></span>
+<span id="cb7-56"><a href="#cb7-56" tabindex="-1"></a><span class="co">#&gt; quick_anova</span></span>
+<span id="cb7-57"><a href="#cb7-57" tabindex="-1"></a><span class="co">#&gt; quick_chisq</span></span>
+<span id="cb7-58"><a href="#cb7-58" tabindex="-1"></a><span class="co">#&gt; quick_cor</span></span>
+<span id="cb7-59"><a href="#cb7-59" tabindex="-1"></a><span class="co">#&gt; quick_ttest</span></span>
+<span id="cb7-60"><a href="#cb7-60" tabindex="-1"></a><span class="co">#&gt; read_excel_flex</span></span>
+<span id="cb7-61"><a href="#cb7-61" tabindex="-1"></a><span class="co">#&gt; read_table_flex</span></span>
+<span id="cb7-62"><a href="#cb7-62" tabindex="-1"></a><span class="co">#&gt; reload_palette_cache</span></span>
+<span id="cb7-63"><a href="#cb7-63" tabindex="-1"></a><span class="co">#&gt; remind</span></span>
+<span id="cb7-64"><a href="#cb7-64" tabindex="-1"></a><span class="co">#&gt; remove_palette</span></span>
+<span id="cb7-65"><a href="#cb7-65" tabindex="-1"></a><span class="co">#&gt; replace_void</span></span>
+<span id="cb7-66"><a href="#cb7-66" tabindex="-1"></a><span class="co">#&gt; rgb2hex</span></span>
+<span id="cb7-67"><a href="#cb7-67" tabindex="-1"></a><span class="co">#&gt; rows_with_void</span></span>
+<span id="cb7-68"><a href="#cb7-68" tabindex="-1"></a><span class="co">#&gt; safe_execute</span></span>
+<span id="cb7-69"><a href="#cb7-69" tabindex="-1"></a><span class="co">#&gt; scale_color_evanverse</span></span>
+<span id="cb7-70"><a href="#cb7-70" tabindex="-1"></a><span class="co">#&gt; scale_colour_evanverse</span></span>
+<span id="cb7-71"><a href="#cb7-71" tabindex="-1"></a><span class="co">#&gt; scale_fill_evanverse</span></span>
+<span id="cb7-72"><a href="#cb7-72" tabindex="-1"></a><span class="co">#&gt; set_mirror</span></span>
+<span id="cb7-73"><a href="#cb7-73" tabindex="-1"></a><span class="co">#&gt; stat_power</span></span>
+<span id="cb7-74"><a href="#cb7-74" tabindex="-1"></a><span class="co">#&gt; stat_samplesize</span></span>
+<span id="cb7-75"><a href="#cb7-75" tabindex="-1"></a><span class="co">#&gt; update_pkg</span></span>
+<span id="cb7-76"><a href="#cb7-76" tabindex="-1"></a><span class="co">#&gt; view</span></span>
+<span id="cb7-77"><a href="#cb7-77" tabindex="-1"></a><span class="co">#&gt; with_timer</span></span>
+<span id="cb7-78"><a href="#cb7-78" tabindex="-1"></a><span class="co">#&gt; write_xlsx_flex</span></span>
+<span id="cb7-79"><a href="#cb7-79" tabindex="-1"></a></span>
+<span id="cb7-80"><a href="#cb7-80" tabindex="-1"></a><span class="co"># Test basic functionality</span></span>
+<span id="cb7-81"><a href="#cb7-81" tabindex="-1"></a><span class="st">&quot;Hello&quot;</span> <span class="sc">%p%</span> <span class="st">&quot; &quot;</span> <span class="sc">%p%</span> <span class="st">&quot;World&quot;</span></span>
+<span id="cb7-82"><a href="#cb7-82" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Hello   World&quot;</span></span></code></pre></div>
+<hr />
+</div>
+<div id="update-evanverse" class="section level2">
+<h2>Update evanverse</h2>
+<div id="update-from-cran" class="section level3">
+<h3>Update from CRAN</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">update.packages</span>(<span class="st">&quot;evanverse&quot;</span>)</span></code></pre></div>
+</div>
+<div id="update-from-github" class="section level3">
+<h3>Update from GitHub</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;evanbio/evanverse&quot;</span>, <span class="at">force =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</div>
+<div id="using-evanverses-built-in-updater" class="section level3">
+<h3>Using evanverse’s Built-in Updater</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">library</span>(evanverse)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">update_pkg</span>(<span class="st">&quot;evanverse&quot;</span>)</span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="troubleshooting" class="section level2">
+<h2>Troubleshooting</h2>
+<div id="installation-fails-with-package-not-available" class="section level3">
+<h3>Installation Fails with “package not available”</h3>
+<p><strong>Solution</strong>: Ensure you’re using R ≥ 4.1.0</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>R.version.string</span></code></pre></div>
+</div>
+<div id="bioconductor-packages-not-installing" class="section level3">
+<h3>Bioconductor Packages Not Installing</h3>
+<p><strong>Solution</strong>: Install BiocManager first, then retry:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;BiocManager&quot;</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="fu">c</span>(<span class="st">&quot;Biobase&quot;</span>, <span class="st">&quot;GSEABase&quot;</span>))</span></code></pre></div>
+</div>
+<div id="permission-errors-on-linuxmacos" class="section level3">
+<h3>Permission Errors on Linux/macOS</h3>
+<p><strong>Solution</strong>: Install to user library:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;evanverse&quot;</span>, <span class="at">lib =</span> <span class="fu">Sys.getenv</span>(<span class="st">&quot;R_LIBS_USER&quot;</span>))</span></code></pre></div>
+</div>
+<div id="networkfirewall-issues" class="section level3">
+<h3>Network/Firewall Issues</h3>
+<p><strong>Solution</strong>: Configure proxy if behind a firewall:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">Sys.setenv</span>(<span class="at">http_proxy =</span> <span class="st">&quot;http://your-proxy:port&quot;</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">Sys.setenv</span>(<span class="at">https_proxy =</span> <span class="st">&quot;https://your-proxy:port&quot;</span>)</span></code></pre></div>
+</div>
+<div id="compilation-issues-on-windows" class="section level3">
+<h3>Compilation Issues on Windows</h3>
+<p><strong>Solution</strong>: Install Rtools from <a href="https://cran.r-project.org/bin/windows/Rtools/">CRAN</a></p>
+<hr />
+</div>
+</div>
+<div id="uninstall" class="section level2">
+<h2>Uninstall</h2>
+<p>To remove evanverse:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">remove.packages</span>(<span class="st">&quot;evanverse&quot;</span>)</span></code></pre></div>
+<hr />
+</div>
+<div id="getting-help" class="section level2">
+<h2>Getting Help</h2>
+<ul>
+<li><strong>Documentation</strong>: <a href="https://evanbio.github.io/evanverse/">https://evanbio.github.io/evanverse/</a></li>
+<li><strong>Issues</strong>: <a href="https://github.com/evanbio/evanverse/issues">GitHub
+Issues</a></li>
+<li><strong>CRAN</strong>: <a href="https://cran.r-project.org/package=evanverse">CRAN Package
+Page</a></li>
+</ul>
+<hr />
+</div>
+<div id="next-steps" class="section level2">
+<h2>Next Steps</h2>
+<p>After installation:</p>
+<ol style="list-style-type: decimal">
+<li>Read the <a href="get-started.html">Getting Started Guide</a></li>
+<li>Explore the <a href="comprehensive-guide.html">Comprehensive
+Guide</a></li>
+<li>Browse the <a href="https://evanbio.github.io/evanverse/reference/">Function
+Reference</a></li>
+<li>Try domain-specific vignettes:
+<ul>
+<li><a href="package-management.html">Package Management</a></li>
+<li><a href="data-processing.html">Data Processing</a></li>
+<li><a href="color-palettes.html">Color Palettes</a></li>
+<li><a href="bioinformatics-workflows.html">Bioinformatics
+Workflows</a></li>
+</ul></li>
+</ol>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

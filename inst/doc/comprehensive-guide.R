@@ -36,8 +36,8 @@ print(palettes_info)
 
 ## ----palettes-demo------------------------------------------------------------
 # Get specific palettes
-vivid_colors <- get_palette("vividset", type = "qualitative")
-blues_gradient <- get_palette("blues", type = "sequential")
+vivid_colors <- get_palette("qual_vivid", type = "qualitative")
+blues_gradient <- get_palette("seq_blues", type = "sequential")
 
 cat("Vivid qualitative palette:\n")
 print(vivid_colors)
@@ -87,7 +87,7 @@ sample_data <- data.frame(
 )
 
 # Create bar plot with custom colors
-vivid_colors <- get_palette("vividset", type = "qualitative")
+vivid_colors <- get_palette("qual_vivid", type = "qualitative")
 bar_plot <- plot_bar(data = sample_data,
                      x = "Category",
                      y = "Count",

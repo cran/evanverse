@@ -3,7 +3,7 @@
 #' Load a named palette from data/palettes.rds, returning a vector of HEX colors.
 #' Automatically checks for type mismatch and provides smart suggestions.
 #'
-#' @param name Character. Name of the palette (e.g. "vividset").
+#' @param name Character. Name of the palette (e.g. "qual_vivid").
 #' @param type Character. One of "sequential", "diverging", "qualitative".
 #' @param n Integer. Number of colors to return. If NULL, returns all colors. Default is NULL.
 #' @param palette_rds Character. Path to RDS file. Default uses system file in package.
@@ -11,10 +11,10 @@
 #' @return Character vector of HEX color codes.
 #'
 #' @examples
-#' get_palette("vividset", type = "qualitative")
-#' get_palette("softtrio", type = "qualitative", n = 2)
-#' get_palette("blues", type = "sequential", n = 3)
-#' get_palette("contrast_duo", type = "diverging")
+#' get_palette("qual_vivid", type = "qualitative")
+#' get_palette("qual_softtrio", type = "qualitative", n = 2)
+#' get_palette("seq_blues", type = "sequential", n = 3)
+#' get_palette("div_contrast", type = "diverging")
 #'
 #' @export
 get_palette <- function(name,
@@ -55,16 +55,33 @@ get_palette <- function(name,
   }
 
   # ===========================================================================
-  # File loading
+  # Palette Data Loading (with caching)
   # ===========================================================================
 
-  # Check if file exists
-  if (!file.exists(palette_rds)) {
-    cli::cli_abort("Palette file not found: {.file {palette_rds}}. Please compile palettes first via {.fn compile_palettes}.")
+  # Get default palette path
+  default_palette_rds <- system.file("extdata", "palettes.rds", package = "evanverse")
+
+  # Initialize palettes variable
+  palettes <- NULL
+
+  # Only use cache if using default path
+  # Reason: Cache only stores data for default path, not custom paths
+  if (palette_rds == default_palette_rds) {
+    # Try to get palettes from cache first
+    palettes <- .get_cached_palettes()
   }
 
-  # Load palette data
-  palettes <- readRDS(palette_rds)
+  # If cache not used or returned NULL, fall back to direct file reading
+  if (is.null(palettes)) {
+    # Check if file exists
+    if (!file.exists(palette_rds)) {
+      cli::cli_abort("Palette file not found: {.file {palette_rds}}. Please compile palettes first via {.fn compile_palettes}.")
+    }
+
+    # Load palette data from file (fallback)
+    palettes <- readRDS(palette_rds)
+  }
+
   valid_types <- names(palettes)
 
   # ===========================================================================

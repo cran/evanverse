@@ -89,24 +89,24 @@ download_geo_data <- function(gse_id,
   }
 
   # Validate destination directory
-  if (!is.character(dest_dir) || length(dest_dir) != 1) {
+  if (!is.character(dest_dir) || length(dest_dir) != 1 || is.na(dest_dir)) {
     cli::cli_abort("dest_dir must be a single character string")
   }
 
   # Validate other parameters
-  if (!is.logical(overwrite) || length(overwrite) != 1) {
+  if (!is.logical(overwrite) || length(overwrite) != 1 || is.na(overwrite)) {
     cli::cli_abort("overwrite must be a single logical value")
   }
-  if (!is.logical(log) || length(log) != 1) {
+  if (!is.logical(log) || length(log) != 1 || is.na(log)) {
     cli::cli_abort("log must be a single logical value")
   }
-  if (!is.null(log_file) && (!is.character(log_file) || length(log_file) != 1)) {
+  if (!is.null(log_file) && (!is.character(log_file) || length(log_file) != 1 || is.na(log_file))) {
     cli::cli_abort("log_file must be a single character string or NULL")
   }
-  if (!is.numeric(retries) || length(retries) != 1 || retries < 0 || retries != as.integer(retries)) {
+  if (!is.numeric(retries) || length(retries) != 1 || is.na(retries) || retries < 0 || retries != as.integer(retries)) {
     cli::cli_abort("retries must be a non-negative integer")
   }
-  if (!is.numeric(timeout) || length(timeout) != 1 || timeout <= 0) {
+  if (!is.numeric(timeout) || length(timeout) != 1 || is.na(timeout) || timeout <= 0) {
     cli::cli_abort("timeout must be a positive number")
   }
 
@@ -294,7 +294,7 @@ download_geo_data <- function(gse_id,
   # Final summary
   cli::cli_h2("Download Summary")
   cli::cli_alert_info("Duration: {round(download_duration, 2)} seconds")
-  cli::cli_alert_info("GSEMatrix: {n_samples} samples \u00d7 {n_features} features")
+  cli::cli_alert_info("GSEMatrix: {n_samples} samples x {n_features} features")
   cli::cli_alert_info("Supplemental files: {length(supplemental_files)}")
   cli::cli_alert_info("Platform files: {length(platform_info$gpl_files)}")
   cli::cli_alert_info("Total files: {meta$total_files_downloaded}")
