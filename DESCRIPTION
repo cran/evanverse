@@ -1,8 +1,8 @@
 Package: evanverse
 Type: Package
 Title: Utility Functions for Data Analysis and Visualization
-Version: 0.4.0
-Date: 2026-02-11
+Version: 0.4.4
+Date: 2026-03-10
 Authors@R: 
     person("Evan", "Zhou", email = "evanzhou.bio@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0009-4600-8175"))
@@ -36,6 +36,6 @@ Suggests: BiocManager, GSEABase, Biobase, GEOquery, biomaRt, car,
         RColorBrewer, devtools, digest, forestploter, purrr, reactable
 LazyData: true
 NeedsCompilation: no
-Packaged: 2026-02-11 07:21:51 UTC; 84241
+Packaged: 2026-03-10 13:49:29 UTC; 84241
 Repository: CRAN
-Date/Publication: 2026-02-11 07:50:03 UTC
+Date/Publication: 2026-03-10 16:10:02 UTC

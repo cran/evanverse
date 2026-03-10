@@ -36,20 +36,23 @@
 #' @importFrom rlang syms
 #'
 #' @examples
-#' set.seed(123)
-#' g1 <- sample(letters, 15)
-#' g2 <- sample(letters, 10)
-#' g3 <- sample(letters, 12)
+#' if (requireNamespace("ggvenn", quietly = TRUE) &&
+#'     requireNamespace("ggVennDiagram", quietly = TRUE)) {
+#'   set.seed(123)
+#'   g1 <- sample(letters, 15)
+#'   g2 <- sample(letters, 10)
+#'   g3 <- sample(letters, 12)
 #'
-#' # Classic 3-set Venn
-#' plot_venn(g1, g2, g3, method = "classic", title = "Classic Venn")
+#'   # Classic 3-set Venn
+#'   plot_venn(g1, g2, g3, method = "classic", title = "Classic Venn")
 #'
-#' # Gradient 2-set Venn
-#' plot_venn(g1, g2, method = "gradient", title = "Gradient Venn")
+#'   # Gradient 2-set Venn
+#'   plot_venn(g1, g2, method = "gradient", title = "Gradient Venn")
 #'
-#' # Return sets for downstream use
-#' out <- plot_venn(g1, g2, return_sets = TRUE)
-#' names(out)
+#'   # Return sets for downstream use
+#'   out <- plot_venn(g1, g2, return_sets = TRUE)
+#'   names(out)
+#' }
 #'
 plot_venn <- function(set1, set2, set3 = NULL, set4 = NULL,
                       category.names = NULL,
@@ -82,13 +85,8 @@ plot_venn <- function(set1, set2, set3 = NULL, set4 = NULL,
   # ===========================================================================
   # Parameter validation
   # ===========================================================================
-
-  # Check required packages
-  required_pkgs <- c("ggvenn", "ggVennDiagram")
-  missing <- required_pkgs[!sapply(required_pkgs, requireNamespace, quietly = TRUE)]
-  if (length(missing) > 0) {
-    cli::cli_abort("Missing required packages: {paste(missing, collapse = ', ')}")
-  }
+  # Reason: Parameter validation must come BEFORE dependency checks so that
+  # tests can validate parameters even when Suggests packages are not available
 
   # Validate required sets
   if (missing(set1) || missing(set2)) {
@@ -199,6 +197,18 @@ plot_venn <- function(set1, set2, set3 = NULL, set4 = NULL,
     if (typeof(venn_sets[[i]]) != base_type) {
       cli::cli_warn("Type mismatch: {var_names[i]} is {typeof(venn_sets[[i]])}, expected {base_type}")
     }
+  }
+
+  # ===========================================================================
+  # Dependency check
+  # ===========================================================================
+  # Reason: Check Suggests packages (ggvenn, ggVennDiagram) after all parameter
+  # validation so that tests can verify parameter errors without these packages
+
+  required_pkgs <- c("ggvenn", "ggVennDiagram")
+  missing <- required_pkgs[!sapply(required_pkgs, requireNamespace, quietly = TRUE)]
+  if (length(missing) > 0) {
+    cli::cli_abort("Missing required packages: {paste(missing, collapse = ', ')}")
   }
 
   # -- Deduplicate
