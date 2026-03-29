@@ -9,20 +9,17 @@ pkg_functions(pkg, key = NULL)
 \arguments{
 \item{pkg}{Character. Package name.}
 
-\item{key}{Character. Optional keyword to filter function names (case-insensitive).}
+\item{key}{Character. Keyword to filter function names (case-insensitive). Default: NULL.}
 }
 \value{
-Character vector of exported names (invisibly).
+Character vector of exported names.
 }
 \description{
-List exported symbols from a package's NAMESPACE. Optionally filter
+List exported symbols from a package's NAMESPACE, optionally filtered
 by a case-insensitive keyword. Results are sorted alphabetically.
 }
 \examples{
-# List all functions in evanverse:
 pkg_functions("evanverse")
-
-# Filter by keyword:
 pkg_functions("evanverse", key = "plot")
 
 }

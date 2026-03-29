@@ -5,33 +5,30 @@
 \title{Check Package Installation Status}
 \usage{
 check_pkg(
-  pkg = NULL,
+  pkg,
   source = c("CRAN", "GitHub", "Bioconductor"),
-  auto_install = TRUE,
+  auto_install = FALSE,
   ...
 )
 }
 \arguments{
-\item{pkg}{Character vector. Package names or GitHub repos (e.g., "user/repo").}
+\item{pkg}{Character vector. Package names or GitHub \code{"user/repo"}.}
 
-\item{source}{Character. Package source: "CRAN", "GitHub", or "Bioconductor".}
+\item{source}{Character. One of \code{"CRAN"}, \code{"GitHub"}, \code{"Bioconductor"}.}
 
-\item{auto_install}{Logical. If TRUE (default), install missing packages automatically.}
+\item{auto_install}{Logical. If \code{TRUE}, install missing packages automatically. Default: \code{FALSE}.}
 
-\item{...}{Additional arguments passed to \code{inst_pkg()}.}
+\item{...}{Passed to \code{inst_pkg()}.}
 }
 \value{
 A tibble with columns: \code{package}, \code{name}, \code{installed}, \code{source}.
 }
 \description{
 Check whether packages are installed and optionally install missing ones.
-Internally calls \code{inst_pkg()} for auto-installation.
+Calls \code{inst_pkg()} for auto-installation.
 }
 \examples{
-# Check if ggplot2 is installed (will install if missing):
 check_pkg("ggplot2", source = "CRAN")
-
-# Check without auto-install:
 check_pkg("r-lib/devtools", source = "GitHub", auto_install = FALSE)
 
 }

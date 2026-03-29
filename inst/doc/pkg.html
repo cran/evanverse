@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Package Management</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Package Management</h1>
+
+
+
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>The pkg module provides six functions covering four areas:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Area</th>
+<th>Functions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Mirror configuration</td>
+<td><code>set_mirror()</code></td>
+</tr>
+<tr class="even">
+<td>Installation &amp; checking</td>
+<td><code>inst_pkg()</code>, <code>check_pkg()</code></td>
+</tr>
+<tr class="odd">
+<td>Updates &amp; versions</td>
+<td><code>update_pkg()</code>, <code>pkg_version()</code></td>
+</tr>
+<tr class="even">
+<td>Exploration</td>
+<td><code>pkg_functions()</code></td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(evanverse)</span></code></pre></div>
+<blockquote>
+<p><strong>Note:</strong> All code examples in this vignette are static
+(<code>eval = FALSE</code>). Output is hand-written to reflect the
+current implementation. Network-dependent functions
+(<code>inst_pkg()</code>, <code>update_pkg()</code>,
+<code>pkg_version()</code>) require an active internet connection at
+runtime.</p>
+</blockquote>
+<hr />
+</div>
+<div id="mirror-configuration" class="section level2">
+<h2>1 Mirror Configuration</h2>
+<div id="set_mirror--set-cran-and-bioconductor-mirrors" class="section level3">
+<h3><code>set_mirror()</code> -Set CRAN and Bioconductor mirrors</h3>
+<p>Configures the CRAN and/or Bioconductor download mirrors used by all
+subsequent installation and update calls. The previous settings are
+returned invisibly, making it easy to restore them.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Set both mirrors to Tsinghua (default)</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">set_mirror</span>()</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; v CRAN mirror set to: https://mirrors.tuna.tsinghua.edu.cn/CRAN</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; v Bioconductor mirror set to: https://mirrors.tuna.tsinghua.edu.cn/bioconductor</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co"># CRAN only</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="fu">set_mirror</span>(<span class="st">&quot;cran&quot;</span>, <span class="st">&quot;ustc&quot;</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; v CRAN mirror set to: https://mirrors.ustc.edu.cn/CRAN</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co"># Bioconductor only</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="fu">set_mirror</span>(<span class="st">&quot;bioc&quot;</span>, <span class="st">&quot;nju&quot;</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; v Bioconductor mirror set to: https://mirrors.nju.edu.cn/bioconductor</span></span></code></pre></div>
+<p>Available mirrors:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Mirror</th>
+<th align="center">CRAN</th>
+<th align="center">Bioconductor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>official</code></td>
+<td align="center">v</td>
+<td align="center">v</td>
+</tr>
+<tr class="even">
+<td><code>tuna</code></td>
+<td align="center">v</td>
+<td align="center">v</td>
+</tr>
+<tr class="odd">
+<td><code>ustc</code></td>
+<td align="center">v</td>
+<td align="center">v</td>
+</tr>
+<tr class="even">
+<td><code>westlake</code></td>
+<td align="center">v</td>
+<td align="center">v</td>
+</tr>
+<tr class="odd">
+<td><code>nju</code></td>
+<td align="center">v</td>
+<td align="center">v</td>
+</tr>
+<tr class="even">
+<td><code>rstudio</code></td>
+<td align="center">v</td>
+<td align="center">-</td>
+</tr>
+<tr class="odd">
+<td><code>aliyun</code></td>
+<td align="center">v</td>
+<td align="center">-</td>
+</tr>
+<tr class="even">
+<td><code>sjtu</code></td>
+<td align="center">v</td>
+<td align="center">-</td>
+</tr>
+<tr class="odd">
+<td><code>pku</code></td>
+<td align="center">v</td>
+<td align="center">-</td>
+</tr>
+<tr class="even">
+<td><code>hku</code></td>
+<td align="center">v</td>
+<td align="center">-</td>
+</tr>
+<tr class="odd">
+<td><code>sustech</code></td>
+<td align="center">v</td>
+<td align="center">-</td>
+</tr>
+</tbody>
+</table>
+<p>CRAN-only mirrors cannot be used with <code>repo = &quot;all&quot;</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">set_mirror</span>(<span class="st">&quot;all&quot;</span>, <span class="st">&quot;aliyun&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; Error in `set_mirror()`:</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; ! Mirror &quot;aliyun&quot; is CRAN-only and cannot be used with `repo = &quot;all&quot;`.</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; i Use `set_mirror(&quot;cran&quot;, &quot;aliyun&quot;)` instead.</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; i Shared mirrors: &quot;official&quot;, &quot;tuna&quot;, &quot;ustc&quot;, &quot;westlake&quot;, &quot;nju&quot;</span></span></code></pre></div>
+<p>The previous settings are returned invisibly for easy
+restoration:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>prev <span class="ot">&lt;-</span> <span class="fu">set_mirror</span>(<span class="st">&quot;cran&quot;</span>, <span class="st">&quot;tuna&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co"># ... do work ...</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">options</span>(prev)  <span class="co"># restore original mirror</span></span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="installation-checking" class="section level2">
+<h2>2 Installation &amp; Checking</h2>
+<div id="inst_pkg--install-packages-from-multiple-sources" class="section level3">
+<h3><code>inst_pkg()</code> -Install packages from multiple sources</h3>
+<p>Installs packages from CRAN, GitHub, Bioconductor, or a local file.
+Packages that are already installed are automatically skipped.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># CRAN</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">inst_pkg</span>(<span class="st">&quot;ggplot2&quot;</span>, <span class="at">source =</span> <span class="st">&quot;CRAN&quot;</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; i Installing from CRAN: ggplot2</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; v Installation complete!</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co"># Multiple packages at once</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="fu">inst_pkg</span>(<span class="fu">c</span>(<span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;tidyr&quot;</span>, <span class="st">&quot;purrr&quot;</span>), <span class="at">source =</span> <span class="st">&quot;CRAN&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># GitHub — basic &quot;user/repo&quot; format</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">inst_pkg</span>(<span class="st">&quot;hadley/emo&quot;</span>, <span class="at">source =</span> <span class="st">&quot;GitHub&quot;</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co"># devtools extended formats are also accepted:</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co"># @ref pins a specific branch, tag, or SHA; #pr installs from a pull request</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="fu">inst_pkg</span>(<span class="st">&quot;tidyverse/ggplot2@v3.4.0&quot;</span>, <span class="at">source =</span> <span class="st">&quot;GitHub&quot;</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="fu">inst_pkg</span>(<span class="st">&quot;r-lib/cli#123&quot;</span>,            <span class="at">source =</span> <span class="st">&quot;GitHub&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Bioconductor</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">inst_pkg</span>(<span class="st">&quot;DESeq2&quot;</span>,    <span class="at">source =</span> <span class="st">&quot;Bioconductor&quot;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">inst_pkg</span>(<span class="st">&quot;scRNAseq&quot;</span>,  <span class="at">source =</span> <span class="st">&quot;Bioconductor&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Local file</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">inst_pkg</span>(<span class="at">source =</span> <span class="st">&quot;Local&quot;</span>, <span class="at">path =</span> <span class="st">&quot;mypackage_1.0.0.tar.gz&quot;</span>)</span></code></pre></div>
+<p><code>path</code> is required for local installs — omitting it raises
+an error immediately:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">inst_pkg</span>(<span class="at">source =</span> <span class="st">&quot;Local&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&gt; Error in `inst_pkg()`:</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt; ! Must provide `path` for local installation.</span></span></code></pre></div>
+<p>Already-installed packages are skipped rather than reinstalled:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">inst_pkg</span>(<span class="st">&quot;ggplot2&quot;</span>, <span class="at">source =</span> <span class="st">&quot;CRAN&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&gt; i Package ggplot2 is already installed. Skipped.</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&gt; v All packages already installed.</span></span></code></pre></div>
+<hr />
+</div>
+<div id="check_pkg--check-installation-status" class="section level3">
+<h3><code>check_pkg()</code> -Check installation status</h3>
+<p>Returns a tibble reporting whether each package is installed. Pass
+<code>auto_install = TRUE</code> to install missing packages
+automatically; a single failure does not interrupt the remaining
+checks.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">check_pkg</span>(<span class="st">&quot;ggplot2&quot;</span>, <span class="at">source =</span> <span class="st">&quot;CRAN&quot;</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 4</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="co">#&gt;   package name    installed source</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;lgl&gt;     &lt;chr&gt;</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt; 1 ggplot2 ggplot2 TRUE      CRAN</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">check_pkg</span>(<span class="fu">c</span>(<span class="st">&quot;ggplot2&quot;</span>, <span class="st">&quot;fakepkg123&quot;</span>), <span class="at">source =</span> <span class="st">&quot;CRAN&quot;</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">#&gt; v Installed: ggplot2</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&gt; ! Missing: fakepkg123</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&gt; # A tibble: 2 × 4</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&gt;   package    name       installed source</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;      &lt;lgl&gt;     &lt;chr&gt;</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#&gt; 1 ggplot2    ggplot2    TRUE      CRAN</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co">#&gt; 2 fakepkg123 fakepkg123 FALSE     CRAN</span></span></code></pre></div>
+<p>For GitHub packages the <code>package</code> column holds the full
+<code>&quot;user/repo&quot;</code> string while <code>name</code> holds just the
+package name:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">check_pkg</span>(<span class="st">&quot;r-lib/cli&quot;</span>, <span class="at">source =</span> <span class="st">&quot;GitHub&quot;</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 4</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co">#&gt;   package   name  installed source</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt; &lt;lgl&gt;     &lt;chr&gt;</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&gt; 1 r-lib/cli cli   TRUE      GitHub</span></span></code></pre></div>
+<p>Auto-install missing packages in one call:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">check_pkg</span>(<span class="fu">c</span>(<span class="st">&quot;ggplot2&quot;</span>, <span class="st">&quot;fakepkg123&quot;</span>), <span class="at">source =</span> <span class="st">&quot;CRAN&quot;</span>, <span class="at">auto_install =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co">#&gt; v Installed: ggplot2</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&gt; ! Missing: fakepkg123</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt; i Installing from CRAN: fakepkg123</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&gt; ...</span></span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="updates-versions" class="section level2">
+<h2>3 Updates &amp; Versions</h2>
+<div id="update_pkg--update-installed-packages" class="section level3">
+<h3><code>update_pkg()</code> -Update installed packages</h3>
+<p>Supports three update modes: full update across all sources,
+source-specific bulk update, or targeted update of named packages.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co"># Update all CRAN + Bioconductor packages</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">update_pkg</span>()</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="co">#&gt; i Checking for BiocManager updates...</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co">#&gt; i Upgrading Bioconductor packages to version 3.21...</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="co">#&gt; v Bioconductor upgraded to version 3.21.</span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co">#&gt; i Updating all CRAN packages...</span></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="co">#&gt; v Update complete!</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># CRAN only</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="fu">update_pkg</span>(<span class="at">source =</span> <span class="st">&quot;CRAN&quot;</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="co"># Bioconductor only (full Bioc upgrade)</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="fu">update_pkg</span>(<span class="at">source =</span> <span class="st">&quot;Bioconductor&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># Specific packages</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="fu">update_pkg</span>(<span class="st">&quot;ggplot2&quot;</span>,            <span class="at">source =</span> <span class="st">&quot;CRAN&quot;</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="fu">update_pkg</span>(<span class="st">&quot;hadley/ggplot2&quot;</span>,     <span class="at">source =</span> <span class="st">&quot;GitHub&quot;</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="fu">update_pkg</span>(<span class="st">&quot;DESeq2&quot;</span>,             <span class="at">source =</span> <span class="st">&quot;Bioconductor&quot;</span>)</span></code></pre></div>
+<blockquote>
+<p>Providing <code>pkg</code> with <code>source = &quot;Bioconductor&quot;</code>
+updates only that package — it does <strong>not</strong> trigger a full
+Bioconductor upgrade.</p>
+</blockquote>
+<p>Combining <code>pkg</code> with <code>source = &quot;all&quot;</code> is an
+error:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">update_pkg</span>(<span class="st">&quot;ggplot2&quot;</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="co">#&gt; Error in `update_pkg()`:</span></span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="co">#&gt; ! Must specify `source` when providing `pkg`.</span></span></code></pre></div>
+<hr />
+</div>
+<div id="pkg_version--check-installed-and-latest-versions" class="section level3">
+<h3><code>pkg_version()</code> -Check installed and latest versions</h3>
+<p>Returns a data frame with columns <code>package</code>,
+<code>version</code> (installed), <code>latest</code> (newest
+available), and <code>source</code> (CRAN, Bioconductor, or GitHub).
+Source detection is automatic.</p>
+<blockquote>
+<p>If the Bioconductor mirror is unreachable, <code>pkg_version()</code>
+degrades gracefully: it emits a warning and treats all Bioc packages as
+“Not Found”. Switch to the official mirror and retry:
+<code>set_mirror(&quot;bioc&quot;, &quot;official&quot;)</code>.</p>
+</blockquote>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">pkg_version</span>(<span class="fu">c</span>(<span class="st">&quot;ggplot2&quot;</span>, <span class="st">&quot;dplyr&quot;</span>))</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="co">#&gt;   package version latest source</span></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="co">#&gt; 1 ggplot2   3.4.4  3.5.0   CRAN</span></span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="co">#&gt; 2   dplyr   1.1.4  1.1.4   CRAN</span></span></code></pre></div>
+<p>Uninstalled or unknown packages return <code>NA</code> for
+<code>version</code> and <code>&quot;Not Found&quot;</code> for
+<code>source</code>:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">pkg_version</span>(<span class="st">&quot;nonexistentpkg&quot;</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="co">#&gt;        package version latest      source</span></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="co">#&gt; 1 nonexistentpkg    &lt;NA&gt;   &lt;NA&gt; Not Found</span></span></code></pre></div>
+<p>GitHub-installed packages report the installed commit SHA and the
+remote reference:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">pkg_version</span>(<span class="st">&quot;emo&quot;</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="co">#&gt;   package version  latest                      source</span></span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="co">#&gt; 1     emo   0.0.1 a1b2c3d GitHub (hadley/emo@master)</span></span></code></pre></div>
+<p>Duplicate package names in the input are silently deduplicated:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="fu">pkg_version</span>(<span class="fu">c</span>(<span class="st">&quot;ggplot2&quot;</span>, <span class="st">&quot;ggplot2&quot;</span>))</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="co">#&gt;   package version latest source</span></span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="co">#&gt; 1 ggplot2   3.4.4  3.5.0   CRAN</span></span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="exploration" class="section level2">
+<h2>4 Exploration</h2>
+<div id="pkg_functions--list-exported-functions" class="section level3">
+<h3><code>pkg_functions()</code> -List exported functions</h3>
+<p>Returns an alphabetically sorted character vector of exported symbols
+from any installed package. Use <code>key</code> to filter by a
+case-insensitive keyword.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">pkg_functions</span>(<span class="st">&quot;evanverse&quot;</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;check_pkg&quot;       &quot;compile_palettes&quot; &quot;create_palette&quot;  &quot;df2list&quot;</span></span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a><span class="co">#&gt;  [5] &quot;df2vect&quot;         &quot;file_info&quot;        &quot;file_ls&quot;         &quot;file_tree&quot;</span></span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a><span class="co">#&gt;  ...</span></span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="co"># Filter by keyword (case-insensitive)</span></span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="fu">pkg_functions</span>(<span class="st">&quot;evanverse&quot;</span>, <span class="at">key =</span> <span class="st">&quot;palette&quot;</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;compile_palettes&quot; &quot;create_palette&quot;   &quot;get_palette&quot;</span></span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a><span class="co">#&gt; [4] &quot;list_palettes&quot;    &quot;palette_gallery&quot;   &quot;preview_palette&quot;</span></span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a><span class="co">#&gt; [7] &quot;remove_palette&quot;</span></span>
+<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a><span class="fu">pkg_functions</span>(<span class="st">&quot;stats&quot;</span>, <span class="at">key =</span> <span class="st">&quot;test&quot;</span>)</span>
+<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a><span class="co">#&gt; [1] &quot;ansari.test&quot;     &quot;bartlett.test&quot;   &quot;binom.test&quot;</span></span>
+<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a><span class="co">#&gt; [4] &quot;chisq.test&quot;      &quot;cor.test&quot;        &quot;fisher.test&quot;</span></span>
+<span id="cb24-10"><a href="#cb24-10" tabindex="-1"></a><span class="co">#&gt; ...</span></span></code></pre></div>
+<p>An unmatched keyword returns an empty vector rather than an
+error:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="fu">pkg_functions</span>(<span class="st">&quot;stats&quot;</span>, <span class="at">key =</span> <span class="st">&quot;zzzzzz&quot;</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="co">#&gt; character(0)</span></span></code></pre></div>
+<p>Querying an uninstalled package raises an informative error:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">pkg_functions</span>(<span class="st">&quot;somefakepkg&quot;</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="co">#&gt; Error in `pkg_functions()`:</span></span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="co">#&gt; ! Package `somefakepkg` is not installed.</span></span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="a-combined-workflow" class="section level2">
+<h2>5 A Combined Workflow</h2>
+<p>The functions compose naturally for setting up a new analysis
+environment. The example below configures mirrors, checks a dependency
+list, installs missing packages, then verifies versions are up to
+date.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="fu">library</span>(evanverse)</span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a><span class="co"># 1. Switch to a fast local mirror</span></span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a><span class="fu">set_mirror</span>(<span class="st">&quot;all&quot;</span>, <span class="st">&quot;tuna&quot;</span>)</span>
+<span id="cb27-5"><a href="#cb27-5" tabindex="-1"></a><span class="co">#&gt; v CRAN mirror set to: https://mirrors.tuna.tsinghua.edu.cn/CRAN</span></span>
+<span id="cb27-6"><a href="#cb27-6" tabindex="-1"></a><span class="co">#&gt; v Bioconductor mirror set to: https://mirrors.tuna.tsinghua.edu.cn/bioconductor</span></span>
+<span id="cb27-7"><a href="#cb27-7" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" tabindex="-1"></a><span class="co"># 2. Define required packages</span></span>
+<span id="cb27-9"><a href="#cb27-9" tabindex="-1"></a>cran_pkgs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ggplot2&quot;</span>, <span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;purrr&quot;</span>, <span class="st">&quot;readxl&quot;</span>)</span>
+<span id="cb27-10"><a href="#cb27-10" tabindex="-1"></a>bioc_pkgs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;DESeq2&quot;</span>, <span class="st">&quot;clusterProfiler&quot;</span>)</span>
+<span id="cb27-11"><a href="#cb27-11" tabindex="-1"></a></span>
+<span id="cb27-12"><a href="#cb27-12" tabindex="-1"></a><span class="co"># 3. Check what is already installed</span></span>
+<span id="cb27-13"><a href="#cb27-13" tabindex="-1"></a>cran_status <span class="ot">&lt;-</span> <span class="fu">check_pkg</span>(cran_pkgs, <span class="at">source =</span> <span class="st">&quot;CRAN&quot;</span>)</span>
+<span id="cb27-14"><a href="#cb27-14" tabindex="-1"></a>bioc_status <span class="ot">&lt;-</span> <span class="fu">check_pkg</span>(bioc_pkgs, <span class="at">source =</span> <span class="st">&quot;Bioconductor&quot;</span>)</span>
+<span id="cb27-15"><a href="#cb27-15" tabindex="-1"></a></span>
+<span id="cb27-16"><a href="#cb27-16" tabindex="-1"></a><span class="co"># 4. Install only missing packages</span></span>
+<span id="cb27-17"><a href="#cb27-17" tabindex="-1"></a>missing_cran <span class="ot">&lt;-</span> cran_status<span class="sc">$</span>name[<span class="sc">!</span>cran_status<span class="sc">$</span>installed]</span>
+<span id="cb27-18"><a href="#cb27-18" tabindex="-1"></a>missing_bioc <span class="ot">&lt;-</span> bioc_status<span class="sc">$</span>name[<span class="sc">!</span>bioc_status<span class="sc">$</span>installed]</span>
+<span id="cb27-19"><a href="#cb27-19" tabindex="-1"></a></span>
+<span id="cb27-20"><a href="#cb27-20" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(missing_cran) <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="fu">inst_pkg</span>(missing_cran, <span class="at">source =</span> <span class="st">&quot;CRAN&quot;</span>)</span>
+<span id="cb27-21"><a href="#cb27-21" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(missing_bioc) <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="fu">inst_pkg</span>(missing_bioc, <span class="at">source =</span> <span class="st">&quot;Bioconductor&quot;</span>)</span>
+<span id="cb27-22"><a href="#cb27-22" tabindex="-1"></a></span>
+<span id="cb27-23"><a href="#cb27-23" tabindex="-1"></a><span class="co"># 5. Verify versions -flag anything outdated</span></span>
+<span id="cb27-24"><a href="#cb27-24" tabindex="-1"></a>versions <span class="ot">&lt;-</span> <span class="fu">pkg_version</span>(<span class="fu">c</span>(cran_pkgs, bioc_pkgs))</span>
+<span id="cb27-25"><a href="#cb27-25" tabindex="-1"></a>outdated <span class="ot">&lt;-</span> versions[<span class="sc">!</span><span class="fu">is.na</span>(versions<span class="sc">$</span>version) <span class="sc">&amp;</span></span>
+<span id="cb27-26"><a href="#cb27-26" tabindex="-1"></a>                     <span class="sc">!</span><span class="fu">is.na</span>(versions<span class="sc">$</span>latest)   <span class="sc">&amp;</span></span>
+<span id="cb27-27"><a href="#cb27-27" tabindex="-1"></a>                     versions<span class="sc">$</span>version <span class="sc">!=</span> versions<span class="sc">$</span>latest, ]</span>
+<span id="cb27-28"><a href="#cb27-28" tabindex="-1"></a>outdated</span>
+<span id="cb27-29"><a href="#cb27-29" tabindex="-1"></a><span class="co">#&gt;      package version latest source</span></span>
+<span id="cb27-30"><a href="#cb27-30" tabindex="-1"></a><span class="co">#&gt; 1    ggplot2   3.4.4  3.5.0   CRAN</span></span>
+<span id="cb27-31"><a href="#cb27-31" tabindex="-1"></a><span class="co">#&gt; 2     DESeq2  1.38.0 1.40.0   Bioconductor</span></span>
+<span id="cb27-32"><a href="#cb27-32" tabindex="-1"></a></span>
+<span id="cb27-33"><a href="#cb27-33" tabindex="-1"></a><span class="co"># 6. Update only the outdated ones</span></span>
+<span id="cb27-34"><a href="#cb27-34" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">nrow</span>(outdated) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb27-35"><a href="#cb27-35" tabindex="-1"></a>  cran_out <span class="ot">&lt;-</span> outdated<span class="sc">$</span>package[outdated<span class="sc">$</span>source <span class="sc">==</span> <span class="st">&quot;CRAN&quot;</span>]</span>
+<span id="cb27-36"><a href="#cb27-36" tabindex="-1"></a>  bioc_out <span class="ot">&lt;-</span> outdated<span class="sc">$</span>package[outdated<span class="sc">$</span>source <span class="sc">==</span> <span class="st">&quot;Bioconductor&quot;</span>]</span>
+<span id="cb27-37"><a href="#cb27-37" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(cran_out) <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="fu">update_pkg</span>(cran_out, <span class="at">source =</span> <span class="st">&quot;CRAN&quot;</span>)</span>
+<span id="cb27-38"><a href="#cb27-38" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(bioc_out) <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="fu">update_pkg</span>(bioc_out, <span class="at">source =</span> <span class="st">&quot;Bioconductor&quot;</span>)</span>
+<span id="cb27-39"><a href="#cb27-39" tabindex="-1"></a>}</span>
+<span id="cb27-40"><a href="#cb27-40" tabindex="-1"></a></span>
+<span id="cb27-41"><a href="#cb27-41" tabindex="-1"></a><span class="co"># 7. Confirm evanverse exports look right</span></span>
+<span id="cb27-42"><a href="#cb27-42" tabindex="-1"></a><span class="fu">pkg_functions</span>(<span class="st">&quot;evanverse&quot;</span>, <span class="at">key =</span> <span class="st">&quot;pkg&quot;</span>)</span>
+<span id="cb27-43"><a href="#cb27-43" tabindex="-1"></a><span class="co">#&gt; [1] &quot;check_pkg&quot;    &quot;inst_pkg&quot;     &quot;pkg_functions&quot; &quot;pkg_version&quot;  &quot;update_pkg&quot;</span></span></code></pre></div>
+<hr />
+</div>
+<div id="getting-help" class="section level2">
+<h2>Getting Help</h2>
+<ul>
+<li><code>?set_mirror</code></li>
+<li><code>?inst_pkg</code>, <code>?check_pkg</code></li>
+<li><code>?update_pkg</code>, <code>?pkg_version</code></li>
+<li><code>?pkg_functions</code></li>
+<li><a href="https://github.com/evanbio/evanverse/issues">GitHub
+Issues</a></li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

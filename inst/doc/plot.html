@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Plotting Functions</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Plotting Functions</h1>
+
+
+
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>The plot module provides five publication-ready plotting
+functions:</p>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>plot_bar()</code></td>
+<td>Bar chart with optional grouping and sorting</td>
+</tr>
+<tr class="even">
+<td><code>plot_density()</code></td>
+<td>Density / distribution curves with optional faceting</td>
+</tr>
+<tr class="odd">
+<td><code>plot_pie()</code></td>
+<td>Pie / donut chart from a vector or data frame</td>
+</tr>
+<tr class="even">
+<td><code>plot_venn()</code></td>
+<td>Venn diagram for 2–4 sets</td>
+</tr>
+<tr class="odd">
+<td><code>plot_forest()</code></td>
+<td>Publication-ready forest plot</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(evanverse)</span></code></pre></div>
+<blockquote>
+<p><strong>Note:</strong> All code examples in this vignette are static
+(<code>eval = FALSE</code>). Output is hand-written to reflect the
+current implementation.</p>
+</blockquote>
+<hr />
+</div>
+<div id="bar-chart" class="section level2">
+<h2>1 Bar Chart</h2>
+<div id="plot_bar-bar-chart-with-optional-grouping" class="section level3">
+<h3><code>plot_bar()</code> — Bar chart with optional grouping</h3>
+<p>Creates a vertical or horizontal bar chart. Bars can be sorted, and
+an optional <code>group_col</code> produces a grouped (side-by-side)
+chart. All inputs are character column names, so the function works
+naturally in pipelines.</p>
+<p><strong>Key parameters</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>data</code></td>
+<td>—</td>
+<td>Data frame</td>
+</tr>
+<tr class="even">
+<td><code>x_col</code></td>
+<td>—</td>
+<td>Column for x-axis categories</td>
+</tr>
+<tr class="odd">
+<td><code>y_col</code></td>
+<td>—</td>
+<td>Column for bar heights</td>
+</tr>
+<tr class="even">
+<td><code>horizontal</code></td>
+<td><code>FALSE</code></td>
+<td>Flip to a horizontal bar chart</td>
+</tr>
+<tr class="odd">
+<td><code>sort</code></td>
+<td><code>FALSE</code></td>
+<td>Sort bars by height</td>
+</tr>
+<tr class="even">
+<td><code>decreasing</code></td>
+<td><code>TRUE</code></td>
+<td>Sort order when <code>sort = TRUE</code></td>
+</tr>
+<tr class="odd">
+<td><code>group_col</code></td>
+<td><code>NULL</code></td>
+<td>Column for grouped bars</td>
+</tr>
+<tr class="even">
+<td><code>sort_by</code></td>
+<td><code>&quot;union&quot;</code></td>
+<td>Which groups to base sort order on</td>
+</tr>
+</tbody>
+</table>
+<div id="basic-usage" class="section level4">
+<h4>Basic usage</h4>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="at">category =</span> <span class="fu">c</span>(<span class="st">&quot;Alpha&quot;</span>, <span class="st">&quot;Beta&quot;</span>, <span class="st">&quot;Gamma&quot;</span>, <span class="st">&quot;Delta&quot;</span>, <span class="st">&quot;Epsilon&quot;</span>),</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="at">count    =</span> <span class="fu">c</span>(<span class="dv">42</span>, <span class="dv">18</span>, <span class="dv">35</span>, <span class="dv">27</span>, <span class="dv">51</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">plot_bar</span>(df, <span class="at">x_col =</span> <span class="st">&quot;category&quot;</span>, <span class="at">y_col =</span> <span class="st">&quot;count&quot;</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; # A ggplot object — vertical bars, categories in original order</span></span></code></pre></div>
+</div>
+<div id="sorted-bars" class="section level4">
+<h4>Sorted bars</h4>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">plot_bar</span>(df, <span class="at">x_col =</span> <span class="st">&quot;category&quot;</span>, <span class="at">y_col =</span> <span class="st">&quot;count&quot;</span>, <span class="at">sort =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; # Bars ordered from tallest (Epsilon = 51) to shortest (Beta = 18)</span></span></code></pre></div>
+</div>
+<div id="horizontal-layout" class="section level4">
+<h4>Horizontal layout</h4>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">plot_bar</span>(df, <span class="at">x_col =</span> <span class="st">&quot;category&quot;</span>, <span class="at">y_col =</span> <span class="st">&quot;count&quot;</span>,</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>         <span class="at">sort =</span> <span class="cn">TRUE</span>, <span class="at">horizontal =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; # Horizontal bars, sorted descending</span></span></code></pre></div>
+</div>
+<div id="grouped-bars" class="section level4">
+<h4>Grouped bars</h4>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="at">category =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;Alpha&quot;</span>, <span class="st">&quot;Beta&quot;</span>, <span class="st">&quot;Gamma&quot;</span>), <span class="at">each =</span> <span class="dv">2</span>),</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="at">group    =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;Control&quot;</span>, <span class="st">&quot;Treatment&quot;</span>), <span class="dv">3</span>),</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="at">value    =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">8</span>, <span class="dv">22</span>, <span class="dv">18</span>, <span class="dv">20</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="fu">plot_bar</span>(df2, <span class="at">x_col =</span> <span class="st">&quot;category&quot;</span>, <span class="at">y_col =</span> <span class="st">&quot;value&quot;</span>, <span class="at">group_col =</span> <span class="st">&quot;group&quot;</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; # Side-by-side bars, two groups per category</span></span></code></pre></div>
+<hr />
+</div>
+</div>
+</div>
+<div id="density-plot" class="section level2">
+<h2>2 Density Plot</h2>
+<div id="plot_density-distribution-curves" class="section level3">
+<h3><code>plot_density()</code> — Distribution curves</h3>
+<p>Draws kernel density curves via <code>geom_density</code>. Supports
+multi-group overlays, optional faceting, and palette customisation.</p>
+<p><strong>Key parameters</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>data</code></td>
+<td>—</td>
+<td>Data frame</td>
+</tr>
+<tr class="even">
+<td><code>x_col</code></td>
+<td>—</td>
+<td>Numeric column for the distribution</td>
+</tr>
+<tr class="odd">
+<td><code>group_col</code></td>
+<td><code>NULL</code></td>
+<td>Column for overlaid group curves</td>
+</tr>
+<tr class="even">
+<td><code>facet_col</code></td>
+<td><code>NULL</code></td>
+<td>Column for faceted panels</td>
+</tr>
+<tr class="odd">
+<td><code>alpha</code></td>
+<td><code>0.3</code></td>
+<td>Fill transparency</td>
+</tr>
+<tr class="even">
+<td><code>adjust</code></td>
+<td><code>1</code></td>
+<td>Bandwidth multiplier</td>
+</tr>
+<tr class="odd">
+<td><code>palette</code></td>
+<td><code>NULL</code></td>
+<td>Named or unnamed character vector of colours</td>
+</tr>
+</tbody>
+</table>
+<div id="single-distribution" class="section level4">
+<h4>Single distribution</h4>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">score =</span> <span class="fu">rnorm</span>(<span class="dv">200</span>, <span class="at">mean =</span> <span class="dv">50</span>, <span class="at">sd =</span> <span class="dv">10</span>))</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="fu">plot_density</span>(df, <span class="at">x_col =</span> <span class="st">&quot;score&quot;</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; # Density curve for all 200 observations</span></span></code></pre></div>
+</div>
+<div id="multiple-groups" class="section level4">
+<h4>Multiple groups</h4>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="at">score =</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">50</span>, <span class="dv">10</span>), <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">65</span>, <span class="dv">8</span>)),</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="at">group =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;Control&quot;</span>, <span class="st">&quot;Treatment&quot;</span>), <span class="at">each =</span> <span class="dv">100</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>)</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="fu">plot_density</span>(df2, <span class="at">x_col =</span> <span class="st">&quot;score&quot;</span>, <span class="at">group_col =</span> <span class="st">&quot;group&quot;</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; # Two overlaid density curves, one per group</span></span></code></pre></div>
+</div>
+<div id="faceted-panels" class="section level4">
+<h4>Faceted panels</h4>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>df3 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  <span class="at">score  =</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">150</span>, <span class="dv">50</span>, <span class="dv">10</span>), <span class="fu">rnorm</span>(<span class="dv">150</span>, <span class="dv">60</span>, <span class="dv">12</span>)),</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="at">group  =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>), <span class="at">each =</span> <span class="dv">150</span>),</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="at">cohort =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;Discovery&quot;</span>, <span class="st">&quot;Replication&quot;</span>), <span class="dv">150</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>)</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="fu">plot_density</span>(df3, <span class="at">x_col =</span> <span class="st">&quot;score&quot;</span>, <span class="at">group_col =</span> <span class="st">&quot;group&quot;</span>, <span class="at">facet_col =</span> <span class="st">&quot;cohort&quot;</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; # Two facet panels (Discovery / Replication), each with two group curves</span></span></code></pre></div>
+<hr />
+</div>
+</div>
+</div>
+<div id="pie-chart" class="section level2">
+<h2>3 Pie Chart</h2>
+<div id="plot_pie-pie-donut-chart" class="section level3">
+<h3><code>plot_pie()</code> — Pie / donut chart</h3>
+<p>Accepts either a plain named vector of counts or a data frame with
+separate group and count columns. Labels can show counts, percentages,
+both, or none.</p>
+<p><strong>Key parameters</strong></p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>data</code></td>
+<td>—</td>
+<td>Named numeric vector or data frame</td>
+</tr>
+<tr class="even">
+<td><code>group_col</code></td>
+<td><code>NULL</code></td>
+<td>Column for slice labels (data frame only)</td>
+</tr>
+<tr class="odd">
+<td><code>count_col</code></td>
+<td><code>NULL</code></td>
+<td>Column for slice sizes (data frame only)</td>
+</tr>
+<tr class="even">
+<td><code>label</code></td>
+<td><code>&quot;percent&quot;</code></td>
+<td><code>&quot;count&quot;</code>, <code>&quot;percent&quot;</code>, <code>&quot;both&quot;</code>,
+or <code>&quot;none&quot;</code></td>
+</tr>
+<tr class="odd">
+<td><code>palette</code></td>
+<td><code>NULL</code></td>
+<td>Character vector of fill colours</td>
+</tr>
+</tbody>
+</table>
+<div id="from-a-named-vector" class="section level4">
+<h4>From a named vector</h4>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>counts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">T_cell =</span> <span class="dv">423</span>, <span class="at">B_cell =</span> <span class="dv">187</span>, <span class="at">NK_cell =</span> <span class="dv">95</span>, <span class="at">Monocyte =</span> <span class="dv">312</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">plot_pie</span>(counts)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt; # Pie chart with four slices, percentage labels</span></span></code></pre></div>
+</div>
+<div id="from-a-data-frame" class="section level4">
+<h4>From a data frame</h4>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="at">cell_type =</span> <span class="fu">c</span>(<span class="st">&quot;T_cell&quot;</span>, <span class="st">&quot;B_cell&quot;</span>, <span class="st">&quot;NK_cell&quot;</span>, <span class="st">&quot;Monocyte&quot;</span>),</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="at">n         =</span> <span class="fu">c</span>(<span class="dv">423</span>, <span class="dv">187</span>, <span class="dv">95</span>, <span class="dv">312</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>)</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="fu">plot_pie</span>(df, <span class="at">group_col =</span> <span class="st">&quot;cell_type&quot;</span>, <span class="at">count_col =</span> <span class="st">&quot;n&quot;</span>, <span class="at">label =</span> <span class="st">&quot;both&quot;</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; # Pie chart with count + percentage labels</span></span></code></pre></div>
+</div>
+<div id="custom-palette" class="section level4">
+<h4>Custom palette</h4>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">plot_pie</span>(counts, <span class="at">palette =</span> <span class="fu">c</span>(<span class="st">&quot;#4C72B0&quot;</span>, <span class="st">&quot;#DD8452&quot;</span>, <span class="st">&quot;#55A868&quot;</span>, <span class="st">&quot;#C44E52&quot;</span>))</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="co">#&gt; # Same chart with custom fill colours</span></span></code></pre></div>
+<hr />
+</div>
+</div>
+</div>
+<div id="venn-diagram" class="section level2">
+<h2>4 Venn Diagram</h2>
+<div id="plot_venn-venn-diagram-for-24-sets" class="section level3">
+<h3><code>plot_venn()</code> — Venn diagram for 2–4 sets</h3>
+<p>Draws classic (<code>ggvenn</code>) or gradient-filled
+(<code>ggVennDiagram</code>) Venn diagrams. Both packages are in
+<code>Suggests</code> — install the one you need.</p>
+<p><strong>Key parameters</strong></p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>set1</code>, <code>set2</code></td>
+<td>—</td>
+<td>Required input vectors</td>
+</tr>
+<tr class="even">
+<td><code>set3</code>, <code>set4</code></td>
+<td><code>NULL</code></td>
+<td>Optional third and fourth sets</td>
+</tr>
+<tr class="odd">
+<td><code>set_names</code></td>
+<td><code>NULL</code></td>
+<td>Override labels (default: variable names)</td>
+</tr>
+<tr class="even">
+<td><code>method</code></td>
+<td><code>&quot;classic&quot;</code></td>
+<td><code>&quot;classic&quot;</code> (ggvenn) or <code>&quot;gradient&quot;</code>
+(ggVennDiagram)</td>
+</tr>
+<tr class="odd">
+<td><code>label</code></td>
+<td><code>&quot;count&quot;</code></td>
+<td><code>&quot;count&quot;</code>, <code>&quot;percent&quot;</code>, <code>&quot;both&quot;</code>,
+or <code>&quot;none&quot;</code></td>
+</tr>
+<tr class="even">
+<td><code>palette</code></td>
+<td><code>NULL</code></td>
+<td>Fill colours (vector for classic; palette name for gradient)</td>
+</tr>
+<tr class="odd">
+<td><code>return_sets</code></td>
+<td><code>FALSE</code></td>
+<td>Return <code>list(plot, sets)</code> instead of just the plot</td>
+</tr>
+</tbody>
+</table>
+<div id="two-sets" class="section level4">
+<h4>Two sets</h4>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>genes_a <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">paste0</span>(<span class="st">&quot;GENE&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>), <span class="dv">40</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>genes_b <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">paste0</span>(<span class="st">&quot;GENE&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>), <span class="dv">35</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="fu">plot_venn</span>(genes_a, genes_b, <span class="at">set_names =</span> <span class="fu">c</span>(<span class="st">&quot;Set A&quot;</span>, <span class="st">&quot;Set B&quot;</span>))</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&gt; # Two-circle Venn with overlap count labels</span></span></code></pre></div>
+</div>
+<div id="three-sets" class="section level4">
+<h4>Three sets</h4>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>genes_c <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">paste0</span>(<span class="st">&quot;GENE&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>), <span class="dv">30</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="fu">plot_venn</span>(genes_a, genes_b, genes_c,</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>          <span class="at">set_names =</span> <span class="fu">c</span>(<span class="st">&quot;RNA-seq&quot;</span>, <span class="st">&quot;ATAC-seq&quot;</span>, <span class="st">&quot;ChIP-seq&quot;</span>),</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>          <span class="at">label =</span> <span class="st">&quot;percent&quot;</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co">#&gt; # Three-circle Venn with percentage labels</span></span></code></pre></div>
+</div>
+<div id="gradient-method" class="section level4">
+<h4>Gradient method</h4>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">plot_venn</span>(genes_a, genes_b, genes_c,</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>          <span class="at">method  =</span> <span class="st">&quot;gradient&quot;</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>          <span class="at">palette =</span> <span class="st">&quot;Blues&quot;</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt; # Gradient-filled Venn (requires ggVennDiagram)</span></span></code></pre></div>
+</div>
+<div id="return-intersection-sets" class="section level4">
+<h4>Return intersection sets</h4>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">plot_venn</span>(genes_a, genes_b, <span class="at">return_sets =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">names</span>(result)</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;plot&quot; &quot;sets&quot;</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="fu">lapply</span>(result<span class="sc">$</span>sets, length)</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co">#&gt; $genes_a</span></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="co">#&gt; [1] 40</span></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="co">#&gt;</span></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="co">#&gt; $genes_b</span></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co">#&gt; [1] 35</span></span></code></pre></div>
+<hr />
+</div>
+</div>
+</div>
+<div id="forest-plot" class="section level2">
+<h2>5 Forest Plot</h2>
+<div id="plot_forest-publication-ready-forest-plot" class="section level3">
+<h3><code>plot_forest()</code> — Publication-ready forest plot</h3>
+<p>Produces a publication-ready forest plot with automatic OR (95% CI)
+label generation, p-value formatting, row bolding, background shading,
+and three-line borders. Built on <code>forestploter</code>.</p>
+<p><strong>Key parameters</strong></p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>data</code></td>
+<td>—</td>
+<td>Data frame; first column is the row label</td>
+</tr>
+<tr class="even">
+<td><code>est</code></td>
+<td>—</td>
+<td>Numeric vector of point estimates (<code>NA</code> = header
+row)</td>
+</tr>
+<tr class="odd">
+<td><code>lower</code>, <code>upper</code></td>
+<td>—</td>
+<td>CI lower and upper bounds</td>
+</tr>
+<tr class="even">
+<td><code>ci_column</code></td>
+<td><code>2L</code></td>
+<td>Column position for the CI graphic</td>
+</tr>
+<tr class="odd">
+<td><code>ref_line</code></td>
+<td><code>1</code></td>
+<td>Reference line (use <code>0</code> for beta coefficients)</td>
+</tr>
+<tr class="even">
+<td><code>xlim</code></td>
+<td><code>c(0, 2)</code></td>
+<td>X-axis limits</td>
+</tr>
+<tr class="odd">
+<td><code>p_cols</code></td>
+<td><code>NULL</code></td>
+<td>Numeric column(s) to auto-format as p-values</td>
+</tr>
+<tr class="even">
+<td><code>indent</code></td>
+<td><code>NULL</code></td>
+<td>Per-row indentation level (0 = parent, 1+ = sub-row)</td>
+</tr>
+<tr class="odd">
+<td><code>bold_label</code></td>
+<td><code>NULL</code></td>
+<td>Logical vector for label bolding</td>
+</tr>
+<tr class="even">
+<td><code>background</code></td>
+<td><code>&quot;zebra&quot;</code></td>
+<td><code>&quot;zebra&quot;</code>, <code>&quot;bold_label&quot;</code>, or
+<code>&quot;none&quot;</code></td>
+</tr>
+<tr class="odd">
+<td><code>save</code></td>
+<td><code>FALSE</code></td>
+<td>Save output to file</td>
+</tr>
+<tr class="even">
+<td><code>dest</code></td>
+<td><code>NULL</code></td>
+<td>File path when <code>save = TRUE</code></td>
+</tr>
+</tbody>
+</table>
+<div id="basic-forest-plot" class="section level4">
+<h4>Basic forest plot</h4>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>  <span class="at">item      =</span> <span class="fu">c</span>(<span class="st">&quot;Exposure vs. control&quot;</span>, <span class="st">&quot;Unadjusted&quot;</span>, <span class="st">&quot;Fully adjusted&quot;</span>),</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>  <span class="st">`</span><span class="at">Cases/N</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;89/4521&quot;</span>, <span class="st">&quot;89/4521&quot;</span>),</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>  <span class="at">p_value   =</span> <span class="fu">c</span>(<span class="cn">NA_real_</span>, <span class="fl">0.001</span>, <span class="fl">0.006</span>),</span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>  <span class="at">check.names =</span> <span class="cn">FALSE</span></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>)</span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">plot_forest</span>(</span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>  <span class="at">data      =</span> df,</span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>  <span class="at">est       =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fl">1.52</span>, <span class="fl">1.43</span>),</span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>  <span class="at">lower     =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fl">1.18</span>, <span class="fl">1.11</span>),</span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>  <span class="at">upper     =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fl">1.96</span>, <span class="fl">1.85</span>),</span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a>  <span class="at">ci_column =</span> <span class="dv">2</span><span class="dt">L</span>,</span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a>  <span class="at">indent    =</span> <span class="fu">c</span>(<span class="dv">0</span><span class="dt">L</span>, <span class="dv">1</span><span class="dt">L</span>, <span class="dv">1</span><span class="dt">L</span>),</span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a>  <span class="at">p_cols    =</span> <span class="st">&quot;p_value&quot;</span>,</span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a>  <span class="at">xlim      =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">3.0</span>)</span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a>)</span>
+<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a></span>
+<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a><span class="fu">plot</span>(p)</span>
+<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a><span class="co">#&gt; # Forest plot — header row bolded, two indented model rows,</span></span>
+<span id="cb16-21"><a href="#cb16-21" tabindex="-1"></a><span class="co">#&gt; # OR (95% CI) column auto-generated, significant p-values bolded</span></span></code></pre></div>
+</div>
+<div id="multi-exposure-plot" class="section level4">
+<h4>Multi-exposure plot</h4>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>  <span class="at">item    =</span> <span class="fu">c</span>(<span class="st">&quot;Biomarker A&quot;</span>, <span class="st">&quot;  Model 1&quot;</span>, <span class="st">&quot;  Model 2&quot;</span>,</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>              <span class="st">&quot;Biomarker B&quot;</span>, <span class="st">&quot;  Model 1&quot;</span>, <span class="st">&quot;  Model 2&quot;</span>),</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>  <span class="at">N       =</span> <span class="fu">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;4521&quot;</span>, <span class="st">&quot;4521&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;4389&quot;</span>, <span class="st">&quot;4389&quot;</span>),</span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>  <span class="at">p_value =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fl">0.001</span>, <span class="fl">0.012</span>, <span class="cn">NA</span>, <span class="fl">0.034</span>, <span class="fl">0.21</span>),</span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>  <span class="at">check.names =</span> <span class="cn">FALSE</span></span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>)</span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">plot_forest</span>(</span>
+<span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a>  <span class="at">data       =</span> df2,</span>
+<span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a>  <span class="at">est        =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fl">1.52</span>, <span class="fl">1.43</span>, <span class="cn">NA</span>, <span class="fl">0.88</span>, <span class="fl">0.91</span>),</span>
+<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a>  <span class="at">lower      =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fl">1.18</span>, <span class="fl">1.11</span>, <span class="cn">NA</span>, <span class="fl">0.72</span>, <span class="fl">0.74</span>),</span>
+<span id="cb17-13"><a href="#cb17-13" tabindex="-1"></a>  <span class="at">upper      =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fl">1.96</span>, <span class="fl">1.85</span>, <span class="cn">NA</span>, <span class="fl">1.07</span>, <span class="fl">1.12</span>),</span>
+<span id="cb17-14"><a href="#cb17-14" tabindex="-1"></a>  <span class="at">ci_column  =</span> <span class="dv">2</span><span class="dt">L</span>,</span>
+<span id="cb17-15"><a href="#cb17-15" tabindex="-1"></a>  <span class="at">indent     =</span> <span class="fu">c</span>(<span class="dv">0</span><span class="dt">L</span>, <span class="dv">1</span><span class="dt">L</span>, <span class="dv">1</span><span class="dt">L</span>, <span class="dv">0</span><span class="dt">L</span>, <span class="dv">1</span><span class="dt">L</span>, <span class="dv">1</span><span class="dt">L</span>),</span>
+<span id="cb17-16"><a href="#cb17-16" tabindex="-1"></a>  <span class="at">bold_label =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span>),</span>
+<span id="cb17-17"><a href="#cb17-17" tabindex="-1"></a>  <span class="at">p_cols     =</span> <span class="st">&quot;p_value&quot;</span>,</span>
+<span id="cb17-18"><a href="#cb17-18" tabindex="-1"></a>  <span class="at">xlim       =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">2.5</span>),</span>
+<span id="cb17-19"><a href="#cb17-19" tabindex="-1"></a>  <span class="at">background =</span> <span class="st">&quot;bold_label&quot;</span></span>
+<span id="cb17-20"><a href="#cb17-20" tabindex="-1"></a>)</span>
+<span id="cb17-21"><a href="#cb17-21" tabindex="-1"></a></span>
+<span id="cb17-22"><a href="#cb17-22" tabindex="-1"></a><span class="fu">plot</span>(p2)</span>
+<span id="cb17-23"><a href="#cb17-23" tabindex="-1"></a><span class="co">#&gt; # Two parent rows (bolded, shaded) with four indented sub-rows</span></span></code></pre></div>
+</div>
+<div id="custom-ci-colours" class="section level4">
+<h4>Custom CI colours</h4>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">plot_forest</span>(</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>  <span class="at">data      =</span> df,</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>  <span class="at">est       =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fl">1.52</span>, <span class="fl">1.43</span>),</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>  <span class="at">lower     =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fl">1.18</span>, <span class="fl">1.11</span>),</span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a>  <span class="at">upper     =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fl">1.96</span>, <span class="fl">1.85</span>),</span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a>  <span class="at">ci_column =</span> <span class="dv">2</span><span class="dt">L</span>,</span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a>  <span class="at">indent    =</span> <span class="fu">c</span>(<span class="dv">0</span><span class="dt">L</span>, <span class="dv">1</span><span class="dt">L</span>, <span class="dv">1</span><span class="dt">L</span>),</span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a>  <span class="at">ci_col    =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="st">&quot;#E74C3C&quot;</span>, <span class="st">&quot;#3498DB&quot;</span>),</span>
+<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a>  <span class="at">p_cols    =</span> <span class="st">&quot;p_value&quot;</span>,</span>
+<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a>  <span class="at">xlim      =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">3.0</span>)</span>
+<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a>)</span>
+<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a></span>
+<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a><span class="fu">plot</span>(p3)</span>
+<span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a><span class="co">#&gt; # Red CI for Unadjusted model, blue CI for Fully adjusted model</span></span></code></pre></div>
+</div>
+<div id="save-to-file" class="section level4">
+<h4>Save to file</h4>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">plot_forest</span>(</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>  <span class="at">data        =</span> df,</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>  <span class="at">est         =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fl">1.52</span>, <span class="fl">1.43</span>),</span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a>  <span class="at">lower       =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fl">1.18</span>, <span class="fl">1.11</span>),</span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a>  <span class="at">upper       =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fl">1.96</span>, <span class="fl">1.85</span>),</span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a>  <span class="at">ci_column   =</span> <span class="dv">2</span><span class="dt">L</span>,</span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a>  <span class="at">indent      =</span> <span class="fu">c</span>(<span class="dv">0</span><span class="dt">L</span>, <span class="dv">1</span><span class="dt">L</span>, <span class="dv">1</span><span class="dt">L</span>),</span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a>  <span class="at">p_cols      =</span> <span class="st">&quot;p_value&quot;</span>,</span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a>  <span class="at">xlim        =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">3.0</span>),</span>
+<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a>  <span class="at">save        =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a>  <span class="at">dest        =</span> <span class="st">&quot;results/forest_plot&quot;</span>,</span>
+<span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a>  <span class="at">save_width  =</span> <span class="dv">20</span>,</span>
+<span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a>  <span class="at">save_height =</span> <span class="dv">8</span></span>
+<span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a>)</span>
+<span id="cb19-15"><a href="#cb19-15" tabindex="-1"></a><span class="co">#&gt; # Saves forest_plot.pdf, .png, .svg, .tiff to results/</span></span></code></pre></div>
+<hr />
+</div>
+</div>
+</div>
+<div id="combined-workflow" class="section level2">
+<h2>Combined Workflow</h2>
+<p>A typical analysis might use several plot functions together:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">library</span>(evanverse)</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="co"># Group sizes as a sorted bar chart</span></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>summary_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>  <span class="at">group =</span> <span class="fu">c</span>(<span class="st">&quot;T_cell&quot;</span>, <span class="st">&quot;B_cell&quot;</span>, <span class="st">&quot;NK_cell&quot;</span>, <span class="st">&quot;Monocyte&quot;</span>),</span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a>  <span class="at">n     =</span> <span class="fu">c</span>(<span class="dv">423</span>, <span class="dv">187</span>, <span class="dv">95</span>, <span class="dv">312</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a>)</span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a></span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a><span class="fu">plot_bar</span>(summary_df, <span class="at">x_col =</span> <span class="st">&quot;group&quot;</span>, <span class="at">y_col =</span> <span class="st">&quot;n&quot;</span>,</span>
+<span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a>         <span class="at">sort =</span> <span class="cn">TRUE</span>, <span class="at">horizontal =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a><span class="co">#&gt; # Horizontal sorted bar chart</span></span>
+<span id="cb20-12"><a href="#cb20-12" tabindex="-1"></a></span>
+<span id="cb20-13"><a href="#cb20-13" tabindex="-1"></a><span class="co"># Proportional composition as a pie chart</span></span>
+<span id="cb20-14"><a href="#cb20-14" tabindex="-1"></a><span class="fu">plot_pie</span>(summary_df, <span class="at">group_col =</span> <span class="st">&quot;group&quot;</span>, <span class="at">count_col =</span> <span class="st">&quot;n&quot;</span>, <span class="at">label =</span> <span class="st">&quot;percent&quot;</span>)</span>
+<span id="cb20-15"><a href="#cb20-15" tabindex="-1"></a><span class="co">#&gt; # Pie chart with percentage labels</span></span>
+<span id="cb20-16"><a href="#cb20-16" tabindex="-1"></a></span>
+<span id="cb20-17"><a href="#cb20-17" tabindex="-1"></a><span class="co"># Score distributions per cell type</span></span>
+<span id="cb20-18"><a href="#cb20-18" tabindex="-1"></a>score_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb20-19"><a href="#cb20-19" tabindex="-1"></a>  <span class="at">score =</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">423</span>, <span class="dv">55</span>, <span class="dv">10</span>), <span class="fu">rnorm</span>(<span class="dv">187</span>, <span class="dv">62</span>, <span class="dv">9</span>),</span>
+<span id="cb20-20"><a href="#cb20-20" tabindex="-1"></a>            <span class="fu">rnorm</span>(<span class="dv">95</span>, <span class="dv">70</span>, <span class="dv">8</span>),   <span class="fu">rnorm</span>(<span class="dv">312</span>, <span class="dv">48</span>, <span class="dv">12</span>)),</span>
+<span id="cb20-21"><a href="#cb20-21" tabindex="-1"></a>  <span class="at">group =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;T_cell&quot;</span>, <span class="st">&quot;B_cell&quot;</span>, <span class="st">&quot;NK_cell&quot;</span>, <span class="st">&quot;Monocyte&quot;</span>),</span>
+<span id="cb20-22"><a href="#cb20-22" tabindex="-1"></a>              <span class="fu">c</span>(<span class="dv">423</span>, <span class="dv">187</span>, <span class="dv">95</span>, <span class="dv">312</span>))</span>
+<span id="cb20-23"><a href="#cb20-23" tabindex="-1"></a>)</span>
+<span id="cb20-24"><a href="#cb20-24" tabindex="-1"></a></span>
+<span id="cb20-25"><a href="#cb20-25" tabindex="-1"></a><span class="fu">plot_density</span>(score_df, <span class="at">x_col =</span> <span class="st">&quot;score&quot;</span>, <span class="at">group_col =</span> <span class="st">&quot;group&quot;</span>)</span>
+<span id="cb20-26"><a href="#cb20-26" tabindex="-1"></a><span class="co">#&gt; # Overlaid density curves for all four cell types</span></span>
+<span id="cb20-27"><a href="#cb20-27" tabindex="-1"></a></span>
+<span id="cb20-28"><a href="#cb20-28" tabindex="-1"></a><span class="co"># DEG overlaps across comparisons</span></span>
+<span id="cb20-29"><a href="#cb20-29" tabindex="-1"></a>deg_tc <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;GENE&quot;</span>, <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">500</span>, <span class="dv">80</span>))</span>
+<span id="cb20-30"><a href="#cb20-30" tabindex="-1"></a>deg_bc <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;GENE&quot;</span>, <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">500</span>, <span class="dv">65</span>))</span>
+<span id="cb20-31"><a href="#cb20-31" tabindex="-1"></a>deg_nk <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;GENE&quot;</span>, <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">500</span>, <span class="dv">45</span>))</span>
+<span id="cb20-32"><a href="#cb20-32" tabindex="-1"></a></span>
+<span id="cb20-33"><a href="#cb20-33" tabindex="-1"></a><span class="fu">plot_venn</span>(deg_tc, deg_bc, deg_nk,</span>
+<span id="cb20-34"><a href="#cb20-34" tabindex="-1"></a>          <span class="at">set_names =</span> <span class="fu">c</span>(<span class="st">&quot;T_cell DEGs&quot;</span>, <span class="st">&quot;B_cell DEGs&quot;</span>, <span class="st">&quot;NK_cell DEGs&quot;</span>))</span>
+<span id="cb20-35"><a href="#cb20-35" tabindex="-1"></a><span class="co">#&gt; # Three-set Venn of differentially expressed genes</span></span></code></pre></div>
+<hr />
+</div>
+<div id="getting-help" class="section level2">
+<h2>Getting Help</h2>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>?plot_bar</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>?plot_density</span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>?plot_pie</span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>?plot_venn</span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>?plot_forest</span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a><span class="fu">help</span>(<span class="at">package =</span> <span class="st">&quot;evanverse&quot;</span>)</span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Base Utilities</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Base Utilities</h1>
+
+
+
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>The base module provides eleven utility functions covering four
+areas:</p>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Area</th>
+<th>Functions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Data frame utilities</td>
+<td><code>df2list()</code>, <code>df2vect()</code>,
+<code>recode_column()</code>, <code>view()</code></td>
+</tr>
+<tr class="even">
+<td>File system utilities</td>
+<td><code>file_ls()</code>, <code>file_info()</code>,
+<code>file_tree()</code></td>
+</tr>
+<tr class="odd">
+<td>Gene ID conversion</td>
+<td><code>gene2entrez()</code>, <code>gene2ensembl()</code></td>
+</tr>
+<tr class="even">
+<td>GMT file parsing</td>
+<td><code>gmt2df()</code>, <code>gmt2list()</code></td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(evanverse)</span></code></pre></div>
+<hr />
+</div>
+<div id="data-frame-utilities" class="section level2">
+<h2>1 Data Frame Utilities</h2>
+<div id="df2list-split-a-data-frame-into-a-named-list" class="section level3">
+<h3><code>df2list()</code> — Split a data frame into a named list</h3>
+<p>Groups one column’s values by another column and returns a named
+list. Useful for building marker lists, gene set inputs, or any grouping
+operation that downstream functions expect as a list.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="at">cell_type =</span> <span class="fu">c</span>(<span class="st">&quot;T_cell&quot;</span>, <span class="st">&quot;T_cell&quot;</span>, <span class="st">&quot;B_cell&quot;</span>, <span class="st">&quot;B_cell&quot;</span>, <span class="st">&quot;B_cell&quot;</span>),</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="at">marker    =</span> <span class="fu">c</span>(<span class="st">&quot;CD3D&quot;</span>, <span class="st">&quot;CD3E&quot;</span>, <span class="st">&quot;CD79A&quot;</span>, <span class="st">&quot;MS4A1&quot;</span>, <span class="st">&quot;CD19&quot;</span>),</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="fu">df2list</span>(df, <span class="at">group_col =</span> <span class="st">&quot;cell_type&quot;</span>, <span class="at">value_col =</span> <span class="st">&quot;marker&quot;</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; $T_cell</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; [1] &quot;CD3D&quot; &quot;CD3E&quot;</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt;</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; $B_cell</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; [1] &quot;CD79A&quot; &quot;MS4A1&quot; &quot;CD19&quot;</span></span></code></pre></div>
+<hr />
+</div>
+<div id="df2vect-extract-a-named-vector-from-a-data-frame" class="section level3">
+<h3><code>df2vect()</code> — Extract a named vector from a data
+frame</h3>
+<p>Extracts two columns and returns a named vector, using one column as
+names and the other as values. The original value type is preserved.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="at">gene  =</span> <span class="fu">c</span>(<span class="st">&quot;TP53&quot;</span>, <span class="st">&quot;BRCA1&quot;</span>, <span class="st">&quot;MYC&quot;</span>),</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="at">score =</span> <span class="fu">c</span>(<span class="fl">0.91</span>, <span class="fl">0.74</span>, <span class="fl">0.55</span>),</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>)</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="fu">df2vect</span>(df, <span class="at">name_col =</span> <span class="st">&quot;gene&quot;</span>, <span class="at">value_col =</span> <span class="st">&quot;score&quot;</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt;  TP53 BRCA1   MYC</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt;  0.91  0.74  0.55</span></span></code></pre></div>
+<p>The name column must not contain <code>NA</code>, empty strings, or
+duplicates — all three are caught at input and raise an informative
+error.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>bad <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">id =</span> <span class="fu">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;a&quot;</span>), <span class="at">val =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">df2vect</span>(bad, <span class="st">&quot;id&quot;</span>, <span class="st">&quot;val&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; Error in `df2vect()`:</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; ! `name_col` contains duplicate values.</span></span></code></pre></div>
+<hr />
+</div>
+<div id="recode_column-map-column-values-via-a-named-vector" class="section level3">
+<h3><code>recode_column()</code> — Map column values via a named
+vector</h3>
+<p>Replaces values in a column using a named vector (<code>dict</code>).
+Unmatched values receive <code>default</code> (NA by default). Set
+<code>name</code> to write to a new column instead of overwriting the
+source.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="at">gene =</span> <span class="fu">c</span>(<span class="st">&quot;TP53&quot;</span>, <span class="st">&quot;BRCA1&quot;</span>, <span class="st">&quot;EGFR&quot;</span>, <span class="st">&quot;XYZ&quot;</span>),</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>dict <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;TP53&quot;</span> <span class="ot">=</span> <span class="st">&quot;Tumour suppressor&quot;</span>, <span class="st">&quot;EGFR&quot;</span> <span class="ot">=</span> <span class="st">&quot;Oncogene&quot;</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co"># Overwrite in place</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="fu">recode_column</span>(df, <span class="at">column =</span> <span class="st">&quot;gene&quot;</span>, <span class="at">dict =</span> dict)</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt;                gene</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; 1 Tumour suppressor</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; 2              &lt;NA&gt;</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; 3          Oncogene</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; 4              &lt;NA&gt;</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co"># Write to a new column, keep original; use a custom fallback</span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="fu">recode_column</span>(df, <span class="at">column =</span> <span class="st">&quot;gene&quot;</span>, <span class="at">dict =</span> dict,</span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>              <span class="at">name =</span> <span class="st">&quot;role&quot;</span>, <span class="at">default =</span> <span class="st">&quot;Unknown&quot;</span>)</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="co">#&gt;    gene              role</span></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co">#&gt; 1  TP53 Tumour suppressor</span></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="co">#&gt; 2 BRCA1           Unknown</span></span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="co">#&gt; 3  EGFR          Oncogene</span></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="co">#&gt; 4   XYZ           Unknown</span></span></code></pre></div>
+<hr />
+</div>
+<div id="view-interactive-table-viewer" class="section level3">
+<h3><code>view()</code> — Interactive table viewer</h3>
+<p>Returns an interactive <code>reactable</code> widget with search,
+filtering, sorting, and pagination. In RStudio the widget renders in the
+Viewer pane; in other environments it renders in the default HTML
+output.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">view</span>(iris, <span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div>
+<p><code>view()</code> requires the <code>reactable</code> package. If
+it is not installed, the function raises a clear error rather than
+falling back silently.</p>
+<hr />
+</div>
+</div>
+<div id="file-system-utilities" class="section level2">
+<h2>2 File System Utilities</h2>
+<div id="file_ls-list-files-with-metadata" class="section level3">
+<h3><code>file_ls()</code> — List files with metadata</h3>
+<p>Returns a data frame of file metadata for all files in a directory.
+Columns: <code>file</code>, <code>size_MB</code>,
+<code>modified_time</code>, <code>path</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># All files in the current directory</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">file_ls</span>(<span class="st">&quot;.&quot;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt;              file size_MB       modified_time                          path</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; 1  DESCRIPTION   0.002  2026-03-20 14:22:01  F:/project/evanverse/DESCRIPTION</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; 2    NAMESPACE   0.002  2026-03-20 14:22:01  F:/project/evanverse/NAMESPACE</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; ...</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co"># R source files only, searched recursively</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="fu">file_ls</span>(<span class="st">&quot;R&quot;</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">pattern =</span> <span class="st">&quot;</span><span class="sc">\\</span><span class="st">.R$&quot;</span>)</span></code></pre></div>
+<hr />
+</div>
+<div id="file_info-metadata-for-specific-files" class="section level3">
+<h3><code>file_info()</code> — Metadata for specific files</h3>
+<p>Returns the same four-column data frame as <code>file_ls()</code> but
+for an explicit vector of file paths rather than a directory scan.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">file_info</span>(<span class="fu">c</span>(<span class="st">&quot;DESCRIPTION&quot;</span>, <span class="st">&quot;NAMESPACE&quot;</span>))</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt;          file size_MB       modified_time                          path</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt; 1 DESCRIPTION   0.002  2026-03-20 14:22:01  F:/project/evanverse/DESCRIPTION</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; 2   NAMESPACE   0.002  2026-03-20 14:22:01  F:/project/evanverse/NAMESPACE</span></span></code></pre></div>
+<p>Duplicate paths in the input are silently deduplicated. Missing files
+raise an error listing all unresolved paths.</p>
+<hr />
+</div>
+<div id="file_tree-print-a-directory-tree" class="section level3">
+<h3><code>file_tree()</code> — Print a directory tree</h3>
+<p>Prints the directory structure in tree format. Returns the lines
+invisibly so output can be captured if needed.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">file_tree</span>(<span class="st">&quot;.&quot;</span>, <span class="at">max_depth =</span> <span class="dv">2</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&gt; F:/project/evanverse</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt; +-- DESCRIPTION</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&gt; +-- NAMESPACE</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&gt; +-- R</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt; |   +-- base.R</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt; |   +-- plot.R</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt; |   +-- utils.R</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&gt; +-- tests</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co">#&gt;     +-- testthat</span></span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="gene-id-conversion" class="section level2">
+<h2>3 Gene ID Conversion</h2>
+<p>Both <code>gene2entrez()</code> and <code>gene2ensembl()</code>
+accept a character vector of gene symbols and return a three-column data
+frame: the original input (<code>symbol</code>), the case-normalised
+form used for matching (<code>symbol_std</code>), and the converted
+ID.</p>
+<div id="reference-table" class="section level3">
+<h3>Reference table</h3>
+<p>Matching is performed against a <code>ref</code> data frame with
+columns <code>symbol</code>, <code>entrez_id</code>, and
+<code>ensembl_id</code>. Two sources are available:</p>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Source</th>
+<th>When to use</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>toy_gene_ref()</code></td>
+<td>Examples, tests, offline work — 20 genes, no network</td>
+</tr>
+<tr class="even">
+<td><code>download_gene_ref()</code></td>
+<td>Production analysis — full genome via biomaRt</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Fast, offline reference for development</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>ref <span class="ot">&lt;-</span> <span class="fu">toy_gene_ref</span>(<span class="at">species =</span> <span class="st">&quot;human&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co"># Full reference for analysis (requires network + Bioconductor)</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co"># ref &lt;- download_gene_ref(species = &quot;human&quot;)</span></span></code></pre></div>
+</div>
+<div id="case-normalisation" class="section level3">
+<h3>Case normalisation</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Species</th>
+<th>Rule applied to both input and reference</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>&quot;human&quot;</code></td>
+<td><code>toupper()</code> — <code>&quot;tp53&quot;</code> and <code>&quot;TP53&quot;</code>
+both match <code>TP53</code></td>
+</tr>
+<tr class="even">
+<td><code>&quot;mouse&quot;</code></td>
+<td><code>tolower()</code> — <code>&quot;TRP53&quot;</code> and
+<code>&quot;Trp53&quot;</code> both match <code>Trp53</code></td>
+</tr>
+</tbody>
+</table>
+<p>Unmatched symbols are returned with <code>NA</code> in the ID column
+rather than dropped.</p>
+</div>
+<div id="gene2entrez" class="section level3">
+<h3><code>gene2entrez()</code></h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>ref <span class="ot">&lt;-</span> <span class="fu">toy_gene_ref</span>(<span class="at">species =</span> <span class="st">&quot;human&quot;</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="fu">gene2entrez</span>(<span class="fu">c</span>(<span class="st">&quot;tp53&quot;</span>, <span class="st">&quot;BRCA1&quot;</span>, <span class="st">&quot;GHOST&quot;</span>), <span class="at">ref =</span> ref, <span class="at">species =</span> <span class="st">&quot;human&quot;</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&gt;   symbol symbol_std entrez_id</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt; 1   tp53       TP53      7157</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&gt; 2  BRCA1      BRCA1       672</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">#&gt; 3  GHOST      GHOST      &lt;NA&gt;</span></span></code></pre></div>
+</div>
+<div id="gene2ensembl" class="section level3">
+<h3><code>gene2ensembl()</code></h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>ref_mouse <span class="ot">&lt;-</span> <span class="fu">toy_gene_ref</span>(<span class="at">species =</span> <span class="st">&quot;mouse&quot;</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="fu">gene2ensembl</span>(<span class="fu">c</span>(<span class="st">&quot;Trp53&quot;</span>, <span class="st">&quot;TRP53&quot;</span>, <span class="st">&quot;FakeGene&quot;</span>), <span class="at">ref =</span> ref_mouse, <span class="at">species =</span> <span class="st">&quot;mouse&quot;</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&gt;     symbol symbol_std          ensembl_id</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&gt; 1    Trp53      trp53  ENSMUSG00000059552</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&gt; 2    TRP53      trp53  ENSMUSG00000059552</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#&gt; 3 FakeGene   fakegene                &lt;NA&gt;</span></span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="gmt-file-parsing" class="section level2">
+<h2>4 GMT File Parsing</h2>
+<p>GMT (Gene Matrix Transposed) is the standard format for gene set
+collections such as MSigDB. Each line encodes one gene set:
+<code>term</code>, <code>description</code>, and a tab-separated list of
+gene symbols.</p>
+<p><code>toy_gmt()</code> writes a minimal GMT file to a temp path for
+offline use:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>tmp <span class="ot">&lt;-</span> <span class="fu">toy_gmt</span>(<span class="at">n =</span> <span class="dv">3</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">readLines</span>(tmp)</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;HALLMARK_P53_PATHWAY\tGenes regulated by p53\tTP53\tBRCA1\tMYC\t...&quot;</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#&gt; [2] &quot;HALLMARK_MTORC1_SIGNALING\tGenes upregulated by mTORC1\tPTEN\t...&quot;</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&gt; [3] &quot;HALLMARK_HYPOXIA\tGenes upregulated under hypoxia\tMTOR\tHIF1A\t...&quot;</span></span></code></pre></div>
+<div id="gmt2df-long-format-data-frame" class="section level3">
+<h3><code>gmt2df()</code> — Long-format data frame</h3>
+<p>Returns one row per gene, making the output directly compatible with
+<code>dplyr</code> and <code>data.table</code> workflows.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">gmt2df</span>(tmp)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">head</span>(df, <span class="dv">4</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&gt;                      term               description  gene</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt; 1   HALLMARK_P53_PATHWAY  Genes regulated by p53   TP53</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&gt; 2   HALLMARK_P53_PATHWAY  Genes regulated by p53  BRCA1</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt; 3   HALLMARK_P53_PATHWAY  Genes regulated by p53    MYC</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt; 4   HALLMARK_P53_PATHWAY  Genes regulated by p53   EGFR</span></span></code></pre></div>
+</div>
+<div id="gmt2list-named-list-of-gene-vectors" class="section level3">
+<h3><code>gmt2list()</code> — Named list of gene vectors</h3>
+<p>Returns a named list where each element is a character vector of gene
+symbols. This is the format expected by most gene set enrichment tools
+(e.g., <code>fgsea</code>, <code>clusterProfiler</code>).</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>gs <span class="ot">&lt;-</span> <span class="fu">gmt2list</span>(tmp)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">names</span>(gs)</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;HALLMARK_P53_PATHWAY&quot;      &quot;HALLMARK_MTORC1_SIGNALING&quot;</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co">#&gt; [3] &quot;HALLMARK_HYPOXIA&quot;</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>gs[[<span class="st">&quot;HALLMARK_P53_PATHWAY&quot;</span>]]</span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;TP53&quot;   &quot;BRCA1&quot;  &quot;MYC&quot;    &quot;EGFR&quot;   &quot;PTEN&quot;   &quot;CDK2&quot;   &quot;MDM2&quot;</span></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="co">#&gt;  [8] &quot;RB1&quot;    &quot;CDKN2A&quot; &quot;AKT1&quot;</span></span></code></pre></div>
+<blockquote>
+<p>Lines with fewer than 3 tab-separated fields are skipped with a
+warning and removed from the result. If every line is malformed, both
+functions return <code>NULL</code> rather than raising an error — this
+is the current behaviour. Always check for a <code>NULL</code> return
+when parsing files from untrusted sources.</p>
+</blockquote>
+<hr />
+</div>
+</div>
+<div id="a-combined-workflow" class="section level2">
+<h2>5 A Combined Workflow</h2>
+<p>Gene ID conversion and GMT parsing compose naturally. The example
+below reads a GMT file, converts all gene symbols to Entrez IDs, and
+produces a named list of ID vectors ready for enrichment analysis.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">library</span>(evanverse)</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="co"># 1. Parse GMT into long format</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>tmp <span class="ot">&lt;-</span> <span class="fu">toy_gmt</span>(<span class="at">n =</span> <span class="dv">5</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>df  <span class="ot">&lt;-</span> <span class="fu">gmt2df</span>(tmp)</span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="co"># 2. Convert symbols to Entrez IDs</span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>ref    <span class="ot">&lt;-</span> <span class="fu">toy_gene_ref</span>(<span class="at">species =</span> <span class="st">&quot;human&quot;</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>id_map <span class="ot">&lt;-</span> <span class="fu">gene2entrez</span>(df<span class="sc">$</span>gene, <span class="at">ref =</span> ref, <span class="at">species =</span> <span class="st">&quot;human&quot;</span>)</span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a><span class="co"># 3. Attach IDs and drop unmatched</span></span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>df<span class="sc">$</span>entrez_id <span class="ot">&lt;-</span> id_map<span class="sc">$</span>entrez_id</span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a>df <span class="ot">&lt;-</span> df[<span class="sc">!</span><span class="fu">is.na</span>(df<span class="sc">$</span>entrez_id), ]</span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a></span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a><span class="co"># 4. Rebuild named list with Entrez IDs</span></span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a>gs_entrez <span class="ot">&lt;-</span> <span class="fu">df2list</span>(df, <span class="at">group_col =</span> <span class="st">&quot;term&quot;</span>, <span class="at">value_col =</span> <span class="st">&quot;entrez_id&quot;</span>)</span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a>gs_entrez[[<span class="st">&quot;HALLMARK_P53_PATHWAY&quot;</span>]]</span>
+<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a><span class="co">#&gt; [1] &quot;7157&quot; &quot;672&quot;  &quot;4609&quot; &quot;1956&quot; &quot;5728&quot; &quot;1031&quot; &quot;4193&quot; &quot;5925&quot; &quot;1029&quot;  &quot;207&quot;</span></span></code></pre></div>
+<hr />
+</div>
+<div id="getting-help" class="section level2">
+<h2>Getting Help</h2>
+<ul>
+<li><code>?df2list</code>, <code>?df2vect</code>,
+<code>?recode_column</code>, <code>?view</code></li>
+<li><code>?file_ls</code>, <code>?file_info</code>,
+<code>?file_tree</code></li>
+<li><code>?gene2entrez</code>, <code>?gene2ensembl</code></li>
+<li><code>?gmt2df</code>, <code>?gmt2list</code></li>
+<li><code>?toy_gene_ref</code>, <code>?toy_gmt</code>,
+<code>?download_gene_ref</code></li>
+<li><a href="https://github.com/evanbio/evanverse/issues">GitHub
+Issues</a></li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

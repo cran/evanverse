@@ -12,7 +12,7 @@
 
 
 
-<title>Welcome to evanverse</title>
+<title>Get Started</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -336,101 +336,185 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">Welcome to evanverse</h1>
+<h1 class="title toc-ignore">Get Started</h1>
 
 
 
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(evanverse)</span></code></pre></div>
-<div id="welcome-to-evanverse" class="section level2">
-<h2>👋 Welcome to <code>evanverse</code></h2>
-<p><strong><code>evanverse</code></strong> is a lightweight, modular R
-toolkit designed to assist your everyday development workflow — with
-functions that are simple, practical, and elegant.</p>
-<p>Whether you’re installing packages, building logical filters, or
-writing expressive scripts, <code>evanverse</code> offers convenience
-functions that <em>just work</em>.</p>
-</div>
-<div id="installation" class="section level2">
-<h2>🚀 Installation</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Recommended installation via GitHub</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;evanbio/evanverse&quot;</span>)</span></code></pre></div>
-</div>
-<div id="core-functions-at-a-glance" class="section level2">
-<h2>🔧 Core Functions at a Glance</h2>
-<div id="p-string-concatenation-operator" class="section level3">
-<h3><code>%p%</code> — String concatenation operator</h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="st">&quot;Good&quot;</span> <span class="sc">%p%</span> <span class="st">&quot;morning&quot;</span></span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Good morning&quot;</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Good morning&quot;</span></span></code></pre></div>
-</div>
-<div id="combine_logic-combine-logical-vectors-in-parallel" class="section level3">
-<h3><code>combine_logic()</code> — Combine logical vectors in
-parallel</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">combine_logic</span>(<span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>), <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">TRUE</span>))</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; [1]  TRUE FALSE</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; [1] TRUE FALSE</span></span></code></pre></div>
-</div>
-</div>
-<div id="full-function-overview" class="section level2">
-<h2>📦 Full Function Overview</h2>
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p><code>evanverse</code> is a utility toolkit that combines package
+management, data helpers, plotting tools, statistical workflows, and
+convenient operators.</p>
 <table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
 <thead>
 <tr class="header">
-<th>Function</th>
-<th>Description</th>
+<th>Area</th>
+<th>Examples</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>%p%</code></td>
-<td>Concatenates strings with space</td>
+<td>Operators</td>
+<td><code>%p%</code>, <code>%nin%</code>, <code>%match%</code>,
+<code>%map%</code>, <code>%is%</code></td>
 </tr>
 <tr class="even">
-<td><code>%is%</code></td>
-<td>Expressive conditional matching</td>
+<td>Package management</td>
+<td><code>set_mirror()</code>, <code>inst_pkg()</code>,
+<code>check_pkg()</code>, <code>update_pkg()</code></td>
 </tr>
 <tr class="odd">
-<td><code>combine_logic()</code></td>
-<td>Combines multiple logical vectors</td>
+<td>Data and parsing</td>
+<td><code>df2list()</code>, <code>df2vect()</code>,
+<code>gmt2df()</code>, <code>gmt2list()</code></td>
 </tr>
 <tr class="even">
-<td><code>remind()</code></td>
-<td>Random reminders for better mood</td>
+<td>Statistics</td>
+<td><code>quick_ttest()</code>, <code>quick_anova()</code>,
+<code>quick_chisq()</code>, <code>quick_cor()</code></td>
 </tr>
 <tr class="odd">
-<td><code>with_timer()</code></td>
-<td>Time any function easily</td>
-</tr>
-<tr class="even">
-<td><code>inst_pkg()</code></td>
-<td>Install packages from multiple sources</td>
-</tr>
-<tr class="odd">
-<td><code>update_pkg()</code></td>
-<td>Update all packages (CRAN/Bio/GitHub)</td>
+<td>Plotting</td>
+<td><code>plot_bar()</code>, <code>plot_density()</code>,
+<code>plot_pie()</code>, <code>plot_venn()</code>,
+<code>plot_forest()</code></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div id="additional-resources" class="section level2">
-<h2>📘 Additional Resources</h2>
-<ul>
-<li><p>📄 <a href="https://github.com/evanbio/evanverse">README on
-GitHub</a></p></li>
-<li><p>🌐 <a href="https://evanbio.github.io/evanverse/">Documentation
-site</a></p></li>
-<li><p>❔ View all functions: <code>?evanverse</code> or
-<code>help(package = &quot;evanverse&quot;)</code></p></li>
-</ul>
-</div>
-<div id="a-note-from-the-author" class="section level2">
-<h2>💬 A note from the author</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(evanverse)</span></code></pre></div>
 <blockquote>
-<p>You’re building your own verse in R — let this toolkit help you move
-faster, smoother, and a little happier along the way.</p>
+<p><strong>Note:</strong> All code examples are static
+(<code>eval = FALSE</code>). If you copy-paste everything at once and
+your fan starts roaring, congratulations: your laptop has entered
+“research mode”.</p>
 </blockquote>
-<p>—— Evan Zhou</p>
+<hr />
+</div>
+<div id="first-30-seconds" class="section level2">
+<h2>1 First 30 Seconds</h2>
+<p>Try a few operators first:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="st">&quot;Good&quot;</span> <span class="sc">%p%</span> <span class="st">&quot;morning&quot;</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Good morning&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>) <span class="sc">%nin%</span> <span class="fu">c</span>(<span class="st">&quot;B&quot;</span>, <span class="st">&quot;D&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; [1]  TRUE FALSE  TRUE</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="fu">c</span>(<span class="st">&quot;tp53&quot;</span>, <span class="st">&quot;egfr&quot;</span>) <span class="sc">%match%</span> <span class="fu">c</span>(<span class="st">&quot;TP53&quot;</span>, <span class="st">&quot;MYC&quot;</span>, <span class="st">&quot;EGFR&quot;</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; [1] 1 3</span></span></code></pre></div>
+<hr />
+</div>
+<div id="install-and-check-packages" class="section level2">
+<h2>2 Install And Check Packages</h2>
+<p>Use built-in package-management helpers:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">set_mirror</span>(<span class="st">&quot;all&quot;</span>, <span class="st">&quot;tuna&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">inst_pkg</span>(<span class="st">&quot;dplyr&quot;</span>, <span class="at">source =</span> <span class="st">&quot;CRAN&quot;</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="fu">check_pkg</span>(<span class="fu">c</span>(<span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;ggplot2&quot;</span>), <span class="at">source =</span> <span class="st">&quot;CRAN&quot;</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; # A tibble with installed status</span></span></code></pre></div>
+<p>Update packages when needed:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">update_pkg</span>(<span class="at">source =</span> <span class="st">&quot;CRAN&quot;</span>)</span></code></pre></div>
+<hr />
+</div>
+<div id="quick-data-helpers" class="section level2">
+<h2>3 Quick Data Helpers</h2>
+<div id="df2list-and-df2vect" class="section level3">
+<h3><code>df2list()</code> and <code>df2vect()</code></h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="at">group =</span> <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>),</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="at">gene  =</span> <span class="fu">c</span>(<span class="st">&quot;TP53&quot;</span>, <span class="st">&quot;EGFR&quot;</span>, <span class="st">&quot;BRCA1&quot;</span>),</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="at">score =</span> <span class="fu">c</span>(<span class="fl">1.2</span>, <span class="fl">0.8</span>, <span class="fl">1.6</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="fu">df2list</span>(df, <span class="at">group_col =</span> <span class="st">&quot;group&quot;</span>, <span class="at">value_col =</span> <span class="st">&quot;gene&quot;</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; $A</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; [1] &quot;TP53&quot; &quot;EGFR&quot;</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; $B</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; [1] &quot;BRCA1&quot;</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="fu">df2vect</span>(df, <span class="at">name_col =</span> <span class="st">&quot;gene&quot;</span>, <span class="at">value_col =</span> <span class="st">&quot;score&quot;</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt;  TP53  EGFR BRCA1</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt;   1.2   0.8   1.6</span></span></code></pre></div>
+</div>
+<div id="toy_gmt-with-gmt-parsers" class="section level3">
+<h3><code>toy_gmt()</code> with GMT parsers</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">toy_gmt</span>(<span class="at">n =</span> <span class="dv">3</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>gmt_df <span class="ot">&lt;-</span> <span class="fu">gmt2df</span>(path)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="fu">head</span>(gmt_df, <span class="dv">3</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt;                    term               description  gene</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; 1 HALLMARK_P53_PATHWAY   Genes regulated by p53  TP53</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; ...</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>gmt_list <span class="ot">&lt;-</span> <span class="fu">gmt2list</span>(path)</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="fu">names</span>(gmt_list)</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; [1] &quot;HALLMARK_P53_PATHWAY&quot; &quot;HALLMARK_MTORC1_SIGNALING&quot; &quot;HALLMARK_HYPOXIA&quot;</span></span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="quick-statistics" class="section level2">
+<h2>4 Quick Statistics</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="at">group =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>), <span class="at">each =</span> <span class="dv">30</span>),</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="at">value =</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">30</span>, <span class="dv">5</span>), <span class="fu">rnorm</span>(<span class="dv">30</span>, <span class="dv">6</span>))</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>)</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>res_t <span class="ot">&lt;-</span> <span class="fu">quick_ttest</span>(df, <span class="at">group_col =</span> <span class="st">&quot;group&quot;</span>, <span class="at">value_col =</span> <span class="st">&quot;value&quot;</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="fu">print</span>(res_t)</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; t.test | p = ...</span></span></code></pre></div>
+<p>Correlation summary:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>res_cor <span class="ot">&lt;-</span> <span class="fu">quick_cor</span>(mtcars)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">print</span>(res_cor)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt; pearson | ... vars | ... significant pairs</span></span></code></pre></div>
+<hr />
+</div>
+<div id="first-plot" class="section level2">
+<h2>5 First Plot</h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">plot_bar</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">category =</span> <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>), <span class="at">value =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">7</span>, <span class="dv">12</span>)),</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="at">x_col =</span> <span class="st">&quot;category&quot;</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="at">y_col =</span> <span class="st">&quot;value&quot;</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>)</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt; # A ggplot object</span></span></code></pre></div>
+<hr />
+</div>
+<div id="a-combined-workflow" class="section level2">
+<h2>6 A Combined Workflow</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># 1) Prepare toy reference and gene sets</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>ref  <span class="ot">&lt;-</span> <span class="fu">toy_gene_ref</span>(<span class="st">&quot;human&quot;</span>, <span class="at">n =</span> <span class="dv">100</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">toy_gmt</span>(<span class="at">n =</span> <span class="dv">3</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co"># 2) Parse GMT and convert gene IDs</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>long <span class="ot">&lt;-</span> <span class="fu">gmt2df</span>(path)</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>idm  <span class="ot">&lt;-</span> <span class="fu">gene2entrez</span>(long<span class="sc">$</span>gene, <span class="at">ref =</span> ref, <span class="at">species =</span> <span class="st">&quot;human&quot;</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>long<span class="sc">$</span>entrez_id <span class="ot">&lt;-</span> idm<span class="sc">$</span>entrez_id</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co"># 3) Build list per term</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>long2 <span class="ot">&lt;-</span> long[<span class="sc">!</span><span class="fu">is.na</span>(long<span class="sc">$</span>entrez_id), ]</span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>sets  <span class="ot">&lt;-</span> <span class="fu">df2list</span>(long2, <span class="at">group_col =</span> <span class="st">&quot;term&quot;</span>, <span class="at">value_col =</span> <span class="st">&quot;entrez_id&quot;</span>)</span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co"># 4) Quick statistical and plotting step</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">quick_cor</span>(mtcars[, <span class="fu">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;hp&quot;</span>, <span class="st">&quot;wt&quot;</span>, <span class="st">&quot;qsec&quot;</span>)])</span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="fu">plot</span>(res, <span class="at">type =</span> <span class="st">&quot;upper&quot;</span>, <span class="at">show_sig =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<hr />
+</div>
+<div id="getting-help" class="section level2">
+<h2>Getting Help</h2>
+<ul>
+<li><code>?&quot;%p%&quot;</code>, <code>?&quot;%nin%&quot;</code>, <code>?&quot;%match%&quot;</code>,
+<code>?&quot;%map%&quot;</code>, <code>?&quot;%is%&quot;</code></li>
+<li><code>?set_mirror</code>, <code>?inst_pkg</code>,
+<code>?check_pkg</code>, <code>?update_pkg</code></li>
+<li><code>?quick_ttest</code>, <code>?quick_anova</code>,
+<code>?quick_chisq</code>, <code>?quick_cor</code></li>
+<li><a href="https://github.com/evanbio/evanverse/issues">GitHub
+Issues</a></li>
+</ul>
 </div>
 
 
